@@ -1,0 +1,134 @@
+name: CI / CD
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+# GITHUB_TOKEN permissions required for GitHub Pages deployment.
+# Fork pull requests receive a read-only token regardless of these grants.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    name: Quality
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install OpenSpec
+        run: npm install -g @fission-ai/openspec@latest
+
+      - name: Validate OpenSpec
+        run: npm run openspec:validate
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Unit tests
+        run: npm run test:unit
+
+  build-and-e2e:
+    name: Build and E2E
+    needs: quality
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright Chromium
+        run: npx playwright install chromium --with-deps
+
+      - name: Compute GitHub Pages base href
+        id: pages-meta
+        shell: bash
+        run: |
+          REPO_NAME="${GITHUB_REPOSITORY#*/}"
+          OWNER_NAME="${GITHUB_REPOSITORY_OWNER}"
+
+          if [[ "$REPO_NAME" == "${OWNER_NAME}.github.io" ]]; then
+            echo "base_href=/" >> "$GITHUB_OUTPUT"
+          else
+            echo "base_href=/${REPO_NAME}/" >> "$GITHUB_OUTPUT"
+          fi
+
+      # Build with the default base href so the Angular app actually loads
+      # when Playwright serves dist/ at the server root.
+      - name: Build production application (E2E)
+        run: npm run build
+
+      - name: Run Playwright
+        run: npm run e2e
+
+      - name: Upload Playwright report
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 14
+
+      # Rebuild with the repository base href for GitHub Pages project sites.
+      - name: Build production application (GitHub Pages)
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          npx ng build \
+            --configuration production \
+            --base-href "${{ steps.pages-meta.outputs.base_href }}"
+
+      - name: Configure GitHub Pages
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: actions/configure-pages@v6
+
+      - name: Upload GitHub Pages artifact
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: dist/neural-lab/browser
+
+  deploy:
+    name: Deploy to GitHub Pages
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: build-and-e2e
+    runs-on: ubuntu-latest
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy GitHub Pages artifact
+        id: deployment
+        uses: actions/deploy-pages@v5
