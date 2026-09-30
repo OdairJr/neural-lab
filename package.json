@@ -7,7 +7,13 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "lint": "ng lint"
+    "test:unit": "ng test --no-watch",
+    "test:watch": "ng test",
+    "lint": "ng lint",
+    "e2e": "playwright test",
+    "e2e:ui": "playwright test --ui",
+    "openspec:validate": "openspec validate --all --strict --no-interactive",
+    "ci": "npm run openspec:validate && npm run lint && npm run test:unit && npm run build && npm run e2e"
   },
   "private": true,
   "packageManager": "npm@11.19.1",
@@ -26,6 +32,7 @@
     "@angular/cli": "^22.1.8",
     "@angular/compiler-cli": "^22.1.0",
     "@eslint/js": "^10.0.1",
+    "@playwright/test": "^1.63.0",
     "@tailwindcss/postcss": "^4.1.12",
     "angular-eslint": "^22.5.0",
     "eslint": "^10.11.0",
