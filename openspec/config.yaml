@@ -1,0 +1,48 @@
+schema: spec-driven
+
+# Project context is shown to AI when creating artifacts.
+context: |
+  NeuralLab is an Angular single-page application deployed as a static site to
+  GitHub Pages. Tests must remain part of the feature, not an afterthought.
+
+  Tech stack:
+  - Angular (latest stable) with standalone components, signals and the current
+    change-detection strategy.
+  - TypeScript as required by the Angular release.
+  - Node.js pinned through .nvmrc, aligned between local development and CI.
+  - Unit/component tests: the Angular unit-test runner (Vitest) via `ng test`.
+  - Browser/E2E tests: Playwright (Chromium).
+  - CI/CD: GitHub Actions. Hosting: GitHub Pages (static only, no server).
+  - Routing uses hash location to remain compatible with GitHub Pages.
+
+  Engineering principles:
+  - Prefer the simplest solution that satisfies the requirement.
+  - Preserve existing architecture and project conventions.
+  - Reuse existing components, services, utilities and abstractions before creating new ones.
+  - Avoid speculative abstractions.
+  - Keep responsibilities explicit and cohesive.
+  - Prefer composition over unnecessary inheritance.
+  - Treat tests as part of the feature, not as an afterthought.
+  - Requirements describe observable behavior.
+  - Design documents should explain important architectural decisions and trade-offs.
+  - Tasks should be small, concrete and verifiable.
+
+rules:
+  proposal:
+    - Clearly describe the problem, objective and scope.
+    - Avoid introducing technical requirements that are not justified by the problem.
+
+  specs:
+    - Requirements must describe observable behavior.
+    - Each requirement should contain verifiable scenarios.
+    - Avoid specifying implementation details unless implementation behavior is itself part of the contract.
+
+  design:
+    - Prefer existing architectural patterns.
+    - Document meaningful trade-offs.
+    - Avoid introducing new infrastructure without a concrete need.
+
+  tasks:
+    - Keep tasks small and independently verifiable.
+    - Include meaningful tests for new or changed behavior where appropriate.
+    - Do not mark tasks complete before verification.
