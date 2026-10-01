@@ -1,3 +1,79 @@
-/* You can add global styles to this file, and also import other style files */
-
 @import 'tailwindcss';
+
+/*
+ * Design tokens. Runtime values live on `--nl-*` so they can be swapped by
+ * `data-theme` (manual override) or `prefers-color-scheme` (system default);
+ * the Tailwind `@theme` block below exposes them as utility classes.
+ */
+:root {
+  --nl-bg: oklch(1 0 0);
+  --nl-surface: oklch(0.985 0.002 250);
+  --nl-text: oklch(0.22 0.02 260);
+  --nl-border: oklch(0.9 0.01 260);
+  --nl-primary: oklch(0.55 0.2 265);
+  --nl-radius: 0.5rem;
+  --nl-font-sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --nl-font-mono: ui-monospace, SFMono-Regular, 'Cascadia Code', Consolas, monospace;
+}
+
+[data-theme='dark'] {
+  --nl-bg: oklch(0.17 0.02 265);
+  --nl-surface: oklch(0.22 0.02 265);
+  --nl-text: oklch(0.95 0.01 260);
+  --nl-border: oklch(0.34 0.02 265);
+  --nl-primary: oklch(0.72 0.15 265);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --nl-bg: oklch(0.17 0.02 265);
+    --nl-surface: oklch(0.22 0.02 265);
+    --nl-text: oklch(0.95 0.01 260);
+    --nl-border: oklch(0.34 0.02 265);
+    --nl-primary: oklch(0.72 0.15 265);
+  }
+}
+
+@theme inline {
+  --color-bg: var(--nl-bg);
+  --color-surface: var(--nl-surface);
+  --color-text: var(--nl-text);
+  --color-border: var(--nl-border);
+  --color-primary: var(--nl-primary);
+  --radius-nl: var(--nl-radius);
+  --font-sans: var(--nl-font-sans);
+  --font-mono: var(--nl-font-mono);
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background-color: var(--nl-bg);
+  color: var(--nl-text);
+  font-family: var(--nl-font-sans);
+}
+
+/* Respect the OS setting and the in-app reduced-motion preference. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+[data-reduced-motion='true'] *,
+[data-reduced-motion='true'] *::before,
+[data-reduced-motion='true'] *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+  scroll-behavior: auto !important;
+}

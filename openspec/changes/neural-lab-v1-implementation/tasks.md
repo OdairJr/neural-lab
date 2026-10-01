@@ -3,38 +3,38 @@
 ## 1. Phase 0 — Foundation (Weeks 1-2)
 
 ### 1.1 Workspace & Tooling
-- [ ] 1.1.1 Adopt the existing Angular 22 CLI workspace (already scaffolded) — verify `npm run build` succeeds
-- [ ] 1.1.2 Configure TypeScript strict mode in `tsconfig.json` (`strict`, `strictTemplates`) — verify `npm run build` typechecks cleanly
-- [ ] 1.1.3 Set up ESLint (angular-eslint flat config) + Prettier with layer boundary rules (`no-restricted-imports`) — verify `npm run lint` passes
-- [ ] 1.1.4 Create layered folder structure per technical architecture under `src/app`: `core/data`, `core/tfjs`, `core/ui`, `core/utils`, `domain/models`, `domain/content`, `domain/progress`, `shared/visualizations`, `shared/experiments`, `shared/challenges`, `shared/code-view`, `features/journey`, `features/lab-shell`, `features/glossary`, `features/settings`, `features/labs`, `educational-content/lab-configs`, `educational-content/concepts`
-- [ ] 1.1.5 Configure path aliases in `tsconfig.json`: `@core/*`, `@domain/*`, `@shared/*`, `@features/*`, `@content/*` — verify imports work in a test file
-- [ ] 1.1.6 Configure GitHub Actions CI workflow: OpenSpec validate, lint, unit tests, build, E2E (extend `.github/workflows/ci-cd.yml`) — verify workflow runs on PR
-- [ ] 1.1.7 Initialize OpenSpec in repo: `openspec init --tools opencode` — verify `openspec/` and `.opencode/` exist
+- [x] 1.1.1 Adopt the existing Angular 22 CLI workspace (already scaffolded) — verify `npm run build` succeeds
+- [x] 1.1.2 Configure TypeScript strict mode in `tsconfig.json` (`strict`, `strictTemplates`) — verify `npm run build` typechecks cleanly
+- [x] 1.1.3 Set up ESLint (angular-eslint flat config) + Prettier with layer boundary rules (`no-restricted-imports`) — verify `npm run lint` passes
+- [x] 1.1.4 Create layered folder structure per technical architecture under `src/app`: `core/data`, `core/tfjs`, `core/ui`, `core/utils`, `domain/models`, `domain/content`, `domain/progress`, `shared/visualizations`, `shared/experiments`, `shared/challenges`, `shared/code-view`, `features/journey`, `features/lab-shell`, `features/glossary`, `features/settings`, `features/labs`, `educational-content/lab-configs`, `educational-content/concepts`
+- [x] 1.1.5 Configure path aliases in `tsconfig.json`: `@core/*`, `@domain/*`, `@shared/*`, `@features/*`, `@content/*` — verify imports work in a test file
+- [x] 1.1.6 Configure GitHub Actions CI workflow: OpenSpec validate, lint, unit tests, build, E2E (extend `.github/workflows/ci-cd.yml`) — verify workflow runs on PR
+- [x] 1.1.7 Initialize OpenSpec in repo: `openspec init --tools opencode` — verify `openspec/` and `.opencode/` exist
 - [ ] 1.1.8 Configure Playwright (`playwright.config.ts`): video on, screenshot on failure + key validation points, trace on retry — verify `npx playwright --version`
 
 ### 1.2 TF.js Integration & Memory Layer
-- [ ] 1.2.1 Install `@tensorflow/tfjs`, `@tensorflow/tfjs-vis` — verify `npm ls @tensorflow/tfjs`
-- [ ] 1.2.2 Create `TfjsInitService` registered with `provideAppInitializer`: backend selection webgpu→webgl→cpu, log selected backend — verify console shows backend on app start
-- [ ] 1.2.3 Create `TFJS_TOKEN` injection token for `tf` instance — verify component can inject and use `tf`
-- [ ] 1.2.4 Create `TfjsMemoryService`: `tidy()`, `track()`, `disposeAll()`, `getMemorySnapshot()`, `watchMemory(budget, onWarn, onCritical)` — verify unit tests: tensor creation/disposal cycle leaks 0 tensors
-- [ ] 1.2.5 Create `TensorSerializerService`: `serialize(tensor)` → `{ shape, dtype, values[], stats }`, `serializeModel(model)` — verify serialization matches tensor values for rank 1-3 tensors
-- [ ] 1.2.6 Create demo page "TF.js Status" showing backend, memory, test tensor ops — verify page renders at `/tfjs-status` route
+- [x] 1.2.1 Install `@tensorflow/tfjs`, `@tensorflow/tfjs-vis` — verify `npm ls @tensorflow/tfjs`
+- [x] 1.2.2 Create `TfjsInitService` registered with `provideAppInitializer`: backend selection webgpu→webgl→cpu, log selected backend — verify console shows backend on app start
+- [x] 1.2.3 Create `TFJS_TOKEN` injection token for `tf` instance — verify component can inject and use `tf`
+- [x] 1.2.4 Create `TfjsMemoryService`: `tidy()`, `track()`, `disposeAll()`, `getMemorySnapshot()`, `watchMemory(budget, onWarn, onCritical)` — verify unit tests: tensor creation/disposal cycle leaks 0 tensors
+- [x] 1.2.5 Create `TensorSerializerService`: `serialize(tensor)` → `{ shape, dtype, values[], stats }`, `serializeModel(model)` — verify serialization matches tensor values for rank 1-3 tensors
+- [x] 1.2.6 Create demo page "TF.js Status" showing backend, memory, test tensor ops — verify page renders at `/tfjs-status` route
 
 ### 1.3 Design System & UI Primitives
-- [ ] 1.3.1 Install Tailwind CSS 4.x: `npm install -D tailwindcss@4 @tailwindcss/postcss postcss` — verify `npx tailwindcss --version`
-- [ ] 1.3.2 Configure `styles.css` with CSS variables for theming (light/dark) and `@import "tailwindcss"` — verify dark/light mode works via `data-theme`
-- [ ] 1.3.3 Implement `core/ui` primitives: Button, Card, Panel, Badge, Tooltip, Modal, Tabs, ProgressRing, CodeBlock, CopyButton — verify Storybook/visual regression for each
-- [ ] 1.3.4 Create `ThemeService`: persists preference, toggles `data-theme` on `<html>` — verify theme persists across refresh
-- [ ] 1.3.5 Create `FocusTrapDirective`, `LiveRegionService`, `ReducedMotionMixin` — verify axe-core passes on modal, live region announces
+- [x] 1.3.1 Install Tailwind CSS 4.x: `npm install -D tailwindcss@4 @tailwindcss/postcss postcss` — verify `npx tailwindcss --version`
+- [x] 1.3.2 Configure `styles.css` with CSS variables for theming (light/dark) and `@import "tailwindcss"` — verify dark/light mode works via `data-theme`
+- [x] 1.3.3 Implement `core/ui` primitives: Button, Card, Panel, Badge, Tooltip, Modal, Tabs, ProgressRing, CodeBlock, CopyButton — verify Storybook/visual regression for each
+- [x] 1.3.4 Create `ThemeService`: persists preference, toggles `data-theme` on `<html>` — verify theme persists across refresh
+- [x] 1.3.5 Create `FocusTrapDirective`, `LiveRegionService`, `ReducedMotionMixin` — verify axe-core passes on modal, live region announces
 - [ ] 1.3.6 Run accessibility audit baseline: `npm run test:a11y` — verify 0 violations AA
 
 ### 1.4 Routing, Layout, Progress Persistence
-- [ ] 1.4.1 Create `app.routes.ts` with lazy routes for all sections (hash location preserved) — verify `npm run start` loads routes
-- [ ] 1.4.2 Create `App` + `MainLayoutComponent` (header, nav, router-outlet) — verify navigation renders
-- [ ] 1.4.3 Create `JourneyComponent` (static 16 labs), `CatalogComponent`, `GlossaryComponent`, `ProgressComponent`, `SettingsComponent` — verify all routes accessible
-- [ ] 1.4.4 Create `ProgressService` (signal-based) + `LocalStorageService` (debounced 500ms, key `neural-lab:v1:progress`) — verify progress persists across refresh
-- [ ] 1.4.5 Create `ProgressMigrator` v1 schema — verify migration handles version bump
-- [ ] 1.4.6 Implement Export/Import progress JSON — verify roundtrip: export → clear localStorage → import → progress restored
+- [x] 1.4.1 Create `app.routes.ts` with lazy routes for all sections (hash location preserved) — verify `npm run start` loads routes
+- [x] 1.4.2 Create `App` + `MainLayoutComponent` (header, nav, router-outlet) — verify navigation renders
+- [x] 1.4.3 Create `JourneyComponent` (static 16 labs), `CatalogComponent`, `GlossaryComponent`, `ProgressComponent`, `SettingsComponent` — verify all routes accessible
+- [x] 1.4.4 Create `ProgressService` (signal-based) + `LocalStorageService` (debounced 500ms, key `neural-lab:v1:progress`) — verify progress persists across refresh
+- [x] 1.4.5 Create `ProgressMigrator` v1 schema — verify migration handles version bump
+- [x] 1.4.6 Implement Export/Import progress JSON — verify roundtrip: export → clear localStorage → import → progress restored
 
 ## 2. Phase 1 — Lab Infrastructure (Weeks 3-4)
 
