@@ -18,3 +18,4 @@ export {
   type ActivationSeries,
 } from './activation-curve/activation-functions';
 export { MemoryTimelineComponent } from './memory-timeline/memory-timeline.component';
+export { NetworkGraphComponent } from './network-graph/network-graph.component';

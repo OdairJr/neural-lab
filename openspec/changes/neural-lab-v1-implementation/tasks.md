@@ -150,37 +150,37 @@
 ## 5. Phase 4 — Neurons, Activations & Networks (Weeks 13-18)
 
 ### 5.1 Lab 11: The Neuron
-- [ ] 5.1.1 Create `lab-11-neuron` lazy feature — verify route works
-- [ ] 5.1.2 Implement inputs, weights, bias, weighted sum, activation, output — verify neuron math correct
-- [ ] 5.1.3 Experiment: single neuron classifying 2D points (adjust w1, w2, b → see decision line) — verify decision boundary updates
-- [ ] 5.1.4 Visualization: network-graph (1 neuron), decision-boundary (line), activation-curve — verify all render
-- [ ] 5.1.5 "Under the hood": shows weighted sum + activation step by step — verify panel shows steps
-- [ ] 5.1.6 Challenge: find weights that separate two clusters — verify challenge validates
+- [x] 5.1.1 Create `lab-11-neuron` lazy feature — verify route works
+- [x] 5.1.2 Implement inputs, weights, bias, weighted sum, activation, output — verify neuron math correct
+- [x] 5.1.3 Experiment: single neuron classifying 2D points (adjust w1, w2, b → see decision line) — verify decision boundary updates
+- [x] 5.1.4 Visualization: network-graph (1 neuron), decision-boundary (line), activation-curve — verify all render
+- [x] 5.1.5 "Under the hood": shows weighted sum + activation step by step — verify panel shows steps
+- [x] 5.1.6 Challenge: find weights that separate two clusters — verify challenge validates
 
 ### 5.2 Lab 12: Activation Functions
-- [ ] 5.2.1 Create `lab-12-activations` lazy feature — verify route works
-- [ ] 5.2.2 Implement Sigmoid, ReLU, Tanh, Softmax — verify formulas correct
-- [ ] 5.2.3 Experiment: interactive curve (drag x → see y, derivative, saturation zones) — verify derivative matches
-- [ ] 5.2.4 Visualization: activation-curve (all 4 overlay), derivative toggle — verify overlay works
-- [ ] 5.2.5 "Under the hood": shows derivative formulas, vanishing gradient demo — verify panel shows math
-- [ ] 5.2.6 Challenge: match activation to use case — verify challenge validates
+- [x] 5.2.1 Create `lab-12-activations` lazy feature — verify route works
+- [x] 5.2.2 Implement Sigmoid, ReLU, Tanh, Softmax — verify formulas correct
+- [x] 5.2.3 Experiment: interactive curve (drag x → see y, derivative, saturation zones) — verify derivative matches
+- [x] 5.2.4 Visualization: activation-curve (all 4 overlay), derivative toggle — verify overlay works
+- [x] 5.2.5 "Under the hood": shows derivative formulas, vanishing gradient demo — verify panel shows math
+- [x] 5.2.6 Challenge: match activation to use case — verify challenge validates
 
 ### 5.3 Lab 13: Neural Networks
-- [ ] 5.3.1 Create `lab-13-neural-networks` lazy feature — verify route works
-- [ ] 5.3.2 Implement layers, forward prop, loss, backprop, training loop — verify training converges
-- [ ] 5.3.3 Experiment: build network (layers/neurons/activations) → train on spiral/moons — verify network trains
-- [ ] 5.3.4 Visualization: decision-boundary animation (epochs), loss/accuracy charts, network-graph with weight magnitudes — verify animation smooth
-- [ ] 5.3.5 Training in worker, streams metrics — verify worker communication, memory stable
-- [ ] 5.3.6 "Under the hood": shows one backprop step (gradients for 2-layer net) — verify panel shows gradients
-- [ ] 5.3.7 Challenge: achieve > 90% accuracy on moons with < 3 hidden layers — verify challenge validates
+- [x] 5.3.1 Create `lab-13-neural-networks` lazy feature — verify route works
+- [x] 5.3.2 Implement layers, forward prop, loss, backprop, training loop — verify training converges
+- [x] 5.3.3 Experiment: build network (layers/neurons/activations) → train on spiral/moons — verify network trains
+- [x] 5.3.4 Visualization: decision-boundary animation (epochs), loss/accuracy charts, network-graph with weight magnitudes — verify animation smooth
+- [x] 5.3.5 Training in worker, streams metrics — verify worker communication, memory stable
+- [x] 5.3.6 "Under the hood": shows one backprop step (gradients for 2-layer net) — verify panel shows gradients
+- [x] 5.3.7 Challenge: achieve > 90% accuracy on moons with < 3 hidden layers — verify challenge validates
 
 ### 5.4 Lab 14: Classification & Decision Boundaries
-- [ ] 5.4.1 Create `lab-14-classification` lazy feature — verify route works
-- [ ] 5.4.2 Implement binary/multi-class, decision boundary, XOR — verify XOR fails with 0 hidden layers
-- [ ] 5.4.3 Experiment: toggle XOR dataset → see linear fail → add hidden layer → see success — verify XOR solved
-- [ ] 5.4.4 Visualization: decision-boundary (evolution slider), confusion matrix, class distribution — verify all render
-- [ ] 5.4.5 Multi-class: softmax output, one-hot labels — verify softmax works
-- [ ] 5.4.6 Challenge: design network that solves XOR (min neurons/layers) — verify challenge validates
+- [x] 5.4.1 Create `lab-14-classification` lazy feature — verify route works
+- [x] 5.4.2 Implement binary/multi-class, decision boundary, XOR — verify XOR fails with 0 hidden layers
+- [x] 5.4.3 Experiment: toggle XOR dataset → see linear fail → add hidden layer → see success — verify XOR solved
+- [x] 5.4.4 Visualization: decision-boundary (evolution slider), confusion matrix, class distribution — verify all render
+- [x] 5.4.5 Multi-class: softmax output, one-hot labels — verify softmax works
+- [x] 5.4.6 Challenge: design network that solves XOR (min neurons/layers) — verify challenge validates
 
 ## 6. Phase 5 — Images & Memory (Weeks 19-22)
 

@@ -4,6 +4,7 @@ import { ActivationCurveComponent } from './activation-curve/activation-curve.co
 import { LineChartComponent } from './line-chart/line-chart.component';
 import { MatrixHeatmapComponent } from './matrix-heatmap/matrix-heatmap.component';
 import { MemoryTimelineComponent } from './memory-timeline/memory-timeline.component';
+import { NetworkGraphComponent } from './network-graph/network-graph.component';
 import { ScatterPlotComponent } from './scatter-plot/scatter-plot.component';
 import { TensorGridComponent } from './tensor-grid/tensor-grid.component';
 
@@ -24,6 +25,7 @@ export class VisualizationRegistry {
     this.register('scatter-plot', ScatterPlotComponent);
     this.register('activation-curve', ActivationCurveComponent);
     this.register('memory-timeline', MemoryTimelineComponent);
+    this.register('network-graph', NetworkGraphComponent);
   }
 
   register(type: VisualizationType, component: Type<unknown>): void {

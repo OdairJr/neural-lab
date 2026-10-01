@@ -7,6 +7,7 @@ import { LineChartComponent } from './line-chart/line-chart.component';
 import { ScatterPlotComponent } from './scatter-plot/scatter-plot.component';
 import { ActivationCurveComponent } from './activation-curve/activation-curve.component';
 import { MemoryTimelineComponent } from './memory-timeline/memory-timeline.component';
+import { NetworkGraphComponent } from './network-graph/network-graph.component';
 
 function configFor(type: VisualizationConfig['type'], label: string): VisualizationConfig {
   return {
@@ -124,6 +125,17 @@ const CASES: {
     },
     expectedRows: 2,
   },
+  {
+    name: 'network-graph',
+    component: NetworkGraphComponent,
+    config: configFor('network-graph', 'Rede'),
+    data: {
+      type: 'network-graph',
+      layers: [{ size: 2 }, { size: 1 }],
+      weights: [[[0.5], [-0.25]]],
+    },
+    expectedRows: 2,
+  },
 ];
 
 describe('visualization data-table alternatives', () => {
@@ -139,6 +151,28 @@ describe('visualization data-table alternatives', () => {
       expect(table.querySelectorAll('tbody tr')).toHaveLength(testCase.expectedRows);
     });
   }
+});
+
+describe('ActivationCurveComponent overlay', () => {
+  it('overlays several functions and exposes a column per function', async () => {
+    const fixture = await render(
+      ActivationCurveComponent,
+      {
+        type: 'activation-curve',
+        fn: 'sigmoid',
+        xRange: [-2, 2],
+        fns: ['sigmoid', 'relu', 'tanh'],
+      },
+      configFor('activation-curve', 'Ativação'),
+    );
+
+    expect(fixture.nativeElement.textContent).toContain('relu');
+    expect(fixture.nativeElement.textContent).toContain('tanh');
+
+    openTable(fixture);
+    const table = fixture.nativeElement.querySelector('table') as HTMLTableElement;
+    expect(table.querySelectorAll('thead th')).toHaveLength(4);
+  });
 });
 
 describe('visualization empty states', () => {

@@ -53,3 +53,19 @@ test('loads a phase-2 lab with its ten stages', async ({ page }) => {
   );
   await expect(page.locator('app-stage-navigator button')).toHaveCount(10);
 });
+
+test('loads the phase-4 neuron lab with its ten stages', async ({ page }) => {
+  await page.goto('/#/lab/11-o-neuronio');
+
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('O Neurônio');
+  await expect(page.locator('app-stage-navigator button')).toHaveCount(10);
+});
+
+test('loads the phase-4 classification lab with its ten stages', async ({ page }) => {
+  await page.goto('/#/lab/14-classificacao-e-fronteiras-de-decisao');
+
+  await expect(page.getByRole('heading', { level: 1 })).toContainText(
+    'Classificação e Fronteiras de Decisão',
+  );
+  await expect(page.locator('app-stage-navigator button')).toHaveCount(10);
+});

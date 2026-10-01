@@ -1,8 +1,12 @@
 import { inject, Injectable, InjectionToken, type OnDestroy } from '@angular/core';
 import { Observable, type Subscriber } from 'rxjs';
 import { gradientDescentRun } from '../utils/regression';
+import { trainNetwork } from '../utils/neural-network';
 import type {
   GradientDescentConfig,
+  NetworkEpochMetric,
+  NetworkTrainingRequestConfig,
+  TrainNetworkRequest,
   TrainRequest,
   TrainingMetric,
   TrainingWorkerOutbound,
@@ -48,6 +52,21 @@ export class TrainingWorkerService implements OnDestroy {
         return this.runOnWorker(worker, config, subscriber);
       }
       return this.runOnMainThread(config, subscriber);
+    });
+  }
+
+  /**
+   * Starts a classification training run and returns a cold observable of
+   * per-epoch metrics. Uses the same worker and main-thread fallback strategy
+   * as the regression run so Lab 10 is unaffected.
+   */
+  runNetwork(config: NetworkTrainingRequestConfig): Observable<NetworkEpochMetric> {
+    return new Observable<NetworkEpochMetric>((subscriber) => {
+      const worker = this.tryCreateWorker();
+      if (worker) {
+        return this.runNetworkOnWorker(worker, config, subscriber);
+      }
+      return this.runNetworkOnMainThread(config, subscriber);
     });
   }
 
@@ -110,6 +129,70 @@ export class TrainingWorkerService implements OnDestroy {
     worker.postMessage(request);
 
     return cleanup;
+  }
+
+  private runNetworkOnWorker(
+    worker: Worker,
+    config: NetworkTrainingRequestConfig,
+    subscriber: Subscriber<NetworkEpochMetric>,
+  ): () => void {
+    const cleanup = (): void => {
+      worker.terminate();
+      if (this.activeWorker === worker) {
+        this.activeWorker = null;
+      }
+    };
+
+    worker.onmessage = (event: MessageEvent<TrainingWorkerOutbound>) => {
+      const message = event.data;
+      if (message.type === 'network-epoch') {
+        if (!subscriber.closed) {
+          subscriber.next(message.metric);
+        }
+      } else if (message.type === 'network-done') {
+        if (!subscriber.closed) {
+          subscriber.complete();
+        }
+        cleanup();
+      }
+    };
+    worker.onerror = () => {
+      if (!subscriber.closed) {
+        subscriber.error(new Error('Falha ao executar o treino da rede no worker.'));
+      }
+      cleanup();
+    };
+
+    const request: TrainNetworkRequest = { type: 'train-network', config };
+    worker.postMessage(request);
+
+    return cleanup;
+  }
+
+  private runNetworkOnMainThread(
+    config: NetworkTrainingRequestConfig,
+    subscriber: Subscriber<NetworkEpochMetric>,
+  ): () => void {
+    const result = trainNetwork(config);
+    let index = 0;
+    let cancelled = false;
+
+    const tick = (): void => {
+      if (cancelled || subscriber.closed) {
+        return;
+      }
+      if (index < result.history.length) {
+        subscriber.next(result.history[index++]);
+        setTimeout(tick, 0);
+      } else {
+        subscriber.complete();
+      }
+    };
+    tick();
+
+    return () => {
+      cancelled = true;
+    };
   }
 
   private runOnMainThread(

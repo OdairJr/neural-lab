@@ -1,4 +1,10 @@
 import type { DataPoint, GradientDescentStep } from '../utils/regression';
+import type {
+  NetworkEpochMetric,
+  NetworkTrainingConfig,
+} from '../utils/neural-network';
+
+export type { NetworkEpochMetric, NetworkTrainingConfig } from '../utils/neural-network';
 
 /** Configuration sent from the main thread to the training worker. */
 export interface GradientDescentConfig {
@@ -34,5 +40,35 @@ export interface DoneMessage {
   loss: number;
 }
 
-export type TrainingWorkerInbound = TrainRequest;
-export type TrainingWorkerOutbound = EpochMessage | DoneMessage;
+/**
+ * Configuration for a classification training run. Kept separate from the
+ * regression config so the original Lab 10 protocol stays backward compatible.
+ */
+export interface NetworkTrainingRequestConfig extends NetworkTrainingConfig {
+  /** Optional delay between epoch messages so the boundary can animate. */
+  epochDelayMs?: number;
+}
+
+export interface TrainNetworkRequest {
+  type: 'train-network';
+  config: NetworkTrainingRequestConfig;
+}
+
+export interface NetworkEpochMessage {
+  type: 'network-epoch';
+  metric: NetworkEpochMetric;
+}
+
+export interface NetworkDoneMessage {
+  type: 'network-done';
+  epochsRun: number;
+  loss: number;
+  accuracy: number;
+}
+
+export type TrainingWorkerInbound = TrainRequest | TrainNetworkRequest;
+export type TrainingWorkerOutbound =
+  | EpochMessage
+  | DoneMessage
+  | NetworkEpochMessage
+  | NetworkDoneMessage;

@@ -9,6 +9,7 @@
  */
 
 import { gradientDescentRun } from '../utils/regression';
+import { trainNetwork } from '../utils/neural-network';
 import type {
   TrainingWorkerInbound,
   TrainingWorkerOutbound,
@@ -29,11 +30,14 @@ const sleep = (ms: number): Promise<void> =>
 
 scope.addEventListener('message', (event) => {
   const message = event.data;
-  if (message?.type !== 'train') {
-    return;
+  if (message?.type === 'train') {
+    runRegression(message.config);
+  } else if (message?.type === 'train-network') {
+    runNetwork(message.config);
   }
+});
 
-  const { config } = message;
+function runRegression(config: Extract<TrainingWorkerInbound, { type: 'train' }>['config']): void {
   const delay = Math.max(0, config.epochDelayMs ?? 0);
   const result = gradientDescentRun(config.data, {
     learningRate: config.learningRate,
@@ -59,4 +63,26 @@ scope.addEventListener('message', (event) => {
       loss: result.loss,
     });
   })();
-});
+}
+
+function runNetwork(
+  config: Extract<TrainingWorkerInbound, { type: 'train-network' }>['config'],
+): void {
+  const delay = Math.max(0, config.epochDelayMs ?? 0);
+  const result = trainNetwork(config);
+
+  void (async () => {
+    for (const metric of result.history) {
+      scope.postMessage({ type: 'network-epoch', metric });
+      if (delay > 0) {
+        await sleep(delay);
+      }
+    }
+    scope.postMessage({
+      type: 'network-done',
+      epochsRun: result.history.length - 1,
+      loss: result.loss,
+      accuracy: result.accuracy,
+    });
+  })();
+}

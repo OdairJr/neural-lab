@@ -21,20 +21,30 @@ const RANGE_PRESETS: readonly [number, number][] = [
   [-10, 10],
 ];
 
+const OVERLAY_COLORS = ['#6366f1', '#f97316', '#10b981', '#ef4444'];
+
+interface CurveSeries {
+  fn: ActivationFunction;
+  values: number[];
+  derivatives: number[];
+  color: string;
+}
+
 /**
- * Plots the four activation functions with an adjustable x-range and a
+ * Plots one or more activation functions with an adjustable x-range and a
  * derivative toggle. Values are computed by the shared pure helpers so the
- * curves match the mathematical definitions.
+ * curves match the mathematical definitions. When `fns` is present the
+ * functions are overlaid (Lab 12).
  */
 @Component({
   selector: 'app-activation-curve',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [VisualizationTableComponent],
   template: `
-    @if (curveData(); as current) {
+    @if (curve(); as current) {
       <figure class="space-y-3">
         <figcaption class="text-xs text-text/70">
-          Função de ativação: <span class="font-mono">{{ current.fn }}</span>
+          Função(ões): <span class="font-mono">{{ current.series.map(seriesLabel).join(', ') }}</span>
         </figcaption>
 
         <div class="flex flex-wrap items-end gap-3">
@@ -61,6 +71,20 @@ const RANGE_PRESETS: readonly [number, number][] = [
             Mostrar derivada
           </label>
         </div>
+
+        @if (current.series.length > 1) {
+          <ul class="flex flex-wrap gap-3 text-xs">
+            @for (series of current.series; track series.fn) {
+              <li class="flex items-center gap-1">
+                <span
+                  class="inline-block h-2 w-4 rounded-full"
+                  [style.background-color]="series.color"
+                ></span>
+                {{ series.fn }}
+              </li>
+            }
+          </ul>
+        }
 
         <canvas
           #canvas
@@ -127,24 +151,41 @@ export class ActivationCurveComponent {
     () => this.derivativeOverride() ?? this.curveData()?.showDerivative ?? false,
   );
 
-  protected readonly curve = computed(() => {
+  protected readonly functions = computed<ActivationFunction[]>(() => {
     const data = this.curveData();
     if (!data) {
+      return [];
+    }
+    return data.fns && data.fns.length > 0
+      ? (data.fns as ActivationFunction[])
+      : [data.fn as ActivationFunction];
+  });
+
+  protected readonly curve = computed(() => {
+    const functions = this.functions();
+    if (functions.length === 0) {
       return null;
     }
     const [min, max] = this.activeRange();
     const xs = sampleRange(min, max, 121);
-    const { values, derivatives } = activationSeries(data.fn as ActivationFunction, xs);
-    return { fn: data.fn, xs, values, derivatives };
+    const series: CurveSeries[] = functions.map((fn, index) => {
+      const { values, derivatives } = activationSeries(fn, xs);
+      return { fn, values, derivatives, color: OVERLAY_COLORS[index % OVERLAY_COLORS.length] };
+    });
+    return { xs, series };
   });
 
   constructor() {
     effect(() => {
       const curve = this.curve();
       if (curve) {
-        this.draw(curve.xs, curve.values, curve.derivatives, this.showDerivative());
+        this.draw(curve.xs, curve.series, this.showDerivative());
       }
     });
+  }
+
+  protected seriesLabel(series: CurveSeries): string {
+    return series.fn;
   }
 
   protected onRangeChange(event: Event): void {
@@ -157,29 +198,33 @@ export class ActivationCurveComponent {
     this.derivativeOverride.set((event.target as HTMLInputElement).checked);
   }
 
-  protected readonly tableColumns = computed(() =>
-    this.showDerivative() ? ['x', 'f(x)', "f'(x)"] : ['x', 'f(x)'],
-  );
+  protected readonly tableColumns = computed(() => {
+    const series = this.curve()?.series ?? [];
+    if (series.length === 1 && this.showDerivative()) {
+      return ['x', 'f(x)', "f'(x)"];
+    }
+    return ['x', ...series.map((entry) => entry.fn)];
+  });
 
   protected readonly tableRows = computed(() => {
-    const data = this.curveData();
-    if (!data) {
+    const curve = this.curve();
+    if (!curve) {
       return [];
     }
     const [min, max] = this.activeRange();
     const xs = sampleRange(min, max, 11);
-    const { values, derivatives } = activationSeries(data.fn as ActivationFunction, xs);
-    return xs.map((x, index) =>
-      this.showDerivative()
-        ? [round(x), round(values[index]), round(derivatives[index])]
-        : [round(x), round(values[index])],
-    );
+    const values = curve.series.map((series) => activationSeries(series.fn, xs));
+    return xs.map((x, index) => {
+      if (curve.series.length === 1 && this.showDerivative()) {
+        return [round(x), round(values[0].values[index]), round(values[0].derivatives[index])];
+      }
+      return [round(x), ...values.map((entry) => round(entry.values[index]))];
+    });
   });
 
   private draw(
     xs: readonly number[],
-    values: readonly number[],
-    derivatives: readonly number[],
+    series: readonly CurveSeries[],
     showDerivative: boolean,
   ): void {
     const canvas = this.canvasRef()?.nativeElement;
@@ -202,7 +247,13 @@ export class ActivationCurveComponent {
     canvas.height = height;
     context.clearRect(0, 0, width, height);
 
-    const plotted = showDerivative ? [...values, ...derivatives] : [...values];
+    const plotted: number[] = [];
+    for (const entry of series) {
+      plotted.push(...entry.values);
+      if (showDerivative) {
+        plotted.push(...entry.derivatives);
+      }
+    }
     const yMin = Math.min(...plotted, 0);
     const yMax = Math.max(...plotted, 1);
     const ySpan = yMax - yMin || 1;
@@ -220,11 +271,11 @@ export class ActivationCurveComponent {
     context.lineTo(width, toY(0));
     context.stroke();
 
-    const strokeSeries = (series: readonly number[], color: string): void => {
+    const strokeSeries = (values: readonly number[], color: string): void => {
       context.strokeStyle = color;
       context.lineWidth = 2;
       context.beginPath();
-      series.forEach((value, index) => {
+      values.forEach((value, index) => {
         const px = toX(xs[index]);
         const py = toY(value);
         if (index === 0) {
@@ -236,9 +287,11 @@ export class ActivationCurveComponent {
       context.stroke();
     };
 
-    strokeSeries(values, '#6366f1');
-    if (showDerivative) {
-      strokeSeries(derivatives, '#f97316');
+    for (const entry of series) {
+      strokeSeries(entry.values, entry.color);
+      if (showDerivative) {
+        strokeSeries(entry.derivatives, `${entry.color}99`);
+      }
     }
   }
 }

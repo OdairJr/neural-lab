@@ -393,6 +393,8 @@ export interface ActivationCurveData {
   fn: 'sigmoid' | 'relu' | 'tanh' | 'softmax';
   xRange: [number, number];
   showDerivative?: boolean;
+  /** Optional overlay of several activation functions (Lab 12). */
+  fns?: ('sigmoid' | 'relu' | 'tanh' | 'softmax')[];
 }
 
 export interface MemoryTimelinePoint {
@@ -425,6 +427,9 @@ export interface ImageTensorData {
 export interface NetworkGraphData {
   type: 'network-graph';
   layers: { size: number; activation?: string }[];
+  /** Optional `[layer][toNeuron][fromNeuron]` weights for edge magnitudes. */
+  weights?: number[][][];
+  title?: string;
 }
 
 export interface Tensor3dData {

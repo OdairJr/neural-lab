@@ -78,6 +78,32 @@ export const LABS_ROUTES: Routes = [
       ),
   },
   {
+    path: '11-o-neuronio',
+    loadChildren: () =>
+      import('./lab-11-neuron/lab-11-neuron.routes').then((m) => m.LAB_11_NEURON_ROUTES),
+  },
+  {
+    path: '12-funcoes-de-ativacao',
+    loadChildren: () =>
+      import('./lab-12-activations/lab-12-activations.routes').then(
+        (m) => m.LAB_12_ACTIVATIONS_ROUTES,
+      ),
+  },
+  {
+    path: '13-redes-neurais',
+    loadChildren: () =>
+      import('./lab-13-neural-networks/lab-13-neural-networks.routes').then(
+        (m) => m.LAB_13_NEURAL_NETWORKS_ROUTES,
+      ),
+  },
+  {
+    path: '14-classificacao-e-fronteiras-de-decisao',
+    loadChildren: () =>
+      import('./lab-14-classification/lab-14-classification.routes').then(
+        (m) => m.LAB_14_CLASSIFICATION_ROUTES,
+      ),
+  },
+  {
     path: ':slug',
     providers: [LabRuntimeService],
     loadComponent: () =>

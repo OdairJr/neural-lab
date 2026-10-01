@@ -292,6 +292,222 @@ const TENSOR_CONCEPTS: readonly ConceptSeed[] = [
   },
 ];
 
+/** Concepts introduced by the Phase 4 laboratories (Labs 11-14). */
+const NEURAL_CONCEPTS: readonly ConceptSeed[] = [
+  {
+    id: 'neuronio',
+    title: 'Neurônio',
+    shortDefinition: 'Unidade que combina entradas ponderadas, bias e uma ativação.',
+    fullDefinition:
+      'Um neurônio artificial recebe várias entradas, multiplica cada uma por um peso, soma tudo e adiciona um viés (bias). O resultado, chamado de soma ponderada (z), passa por uma função de ativação que produz a saída. É a unidade básica de uma rede neural e corresponde a uma camada densa de uma unidade.',
+    mathematicalNotation: 'a = f\\left(\\sum_i w_i x_i + b\\right)',
+    visualAnalogy:
+      'Uma votação em que cada entrada tem um peso diferente e o resultado só "acende" se passar de um limiar.',
+    tfjsApi: ['tf.layers.dense', 'tf.matMul', 'tf.add'],
+    relatedConcepts: ['peso', 'bias', 'soma-ponderada', 'ativacao'],
+    introducedInLab: 'lab-11-neuron',
+  },
+  {
+    id: 'peso',
+    title: 'Peso',
+    shortDefinition: 'Número que multiplica uma entrada e indica sua importância.',
+    fullDefinition:
+      'O peso (weight) mede quanto cada entrada influencia a saída. Pesos grandes amplificam uma entrada; pesos próximos de zero a ignoram; pesos negativos invertem seu efeito. Aprender é justamente ajustar os pesos para reduzir o erro.',
+    mathematicalNotation: 'w_i \\in \\mathbb{R}',
+    visualAnalogy: 'O volume de cada microfone numa mesa de som.',
+    tfjsApi: ['tf.variable', 'layer.getWeights()'],
+    relatedConcepts: ['neuronio', 'bias', 'gradiente'],
+    introducedInLab: 'lab-11-neuron',
+  },
+  {
+    id: 'bias',
+    title: 'Bias',
+    shortDefinition: 'Termo somado à soma ponderada que desloca a ativação.',
+    fullDefinition:
+      'O bias (viés) é um número somado à soma ponderada antes da ativação. Ele permite que o neurônio "dispare" mesmo quando todas as entradas são zero, deslocando a fronteira de decisão. Sem bias, a reta de decisão passaria obrigatoriamente pela origem.',
+    mathematicalNotation: 'z = \\sum_i w_i x_i + b',
+    visualAnalogy: 'O ajuste de altura de um termostato, independente da temperatura lida.',
+    tfjsApi: ['tf.add', 'tf.layers.dense'],
+    relatedConcepts: ['neuronio', 'peso', 'soma-ponderada'],
+    introducedInLab: 'lab-11-neuron',
+  },
+  {
+    id: 'soma-ponderada',
+    title: 'Soma ponderada',
+    shortDefinition: 'Combinação linear das entradas pelos pesos, mais o bias.',
+    fullDefinition:
+      'A soma ponderada (z) é o produto escalar entre o vetor de entradas e o vetor de pesos, somado ao bias. É a etapa linear do neurônio; a não-linearidade vem depois, na ativação.',
+    mathematicalNotation: 'z = \\mathbf{w}\\cdot\\mathbf{x} + b',
+    visualAnalogy: 'O total de uma conta em que cada item tem um preço diferente.',
+    tfjsApi: ['tf.dot', 'tf.matMul', 'tf.add'],
+    relatedConcepts: ['neuronio', 'produto-escalar', 'peso', 'bias'],
+    introducedInLab: 'lab-11-neuron',
+  },
+  {
+    id: 'ativacao',
+    title: 'Ativação',
+    shortDefinition: 'Função não-linear aplicada à soma ponderada do neurônio.',
+    fullDefinition:
+      'A função de ativação transforma a soma ponderada em saída. Sem ela, várias camadas lineares equivaleriam a uma só; a não-linearidade é o que permite à rede aprender fronteiras curvas. Exemplos: sigmoid, ReLU, tanh e softmax.',
+    mathematicalNotation: 'a = f(z)',
+    visualAnalogy: 'O botão que decide se o sinal passa, é bloqueado ou é amplificado.',
+    tfjsApi: ['tf.sigmoid', 'tf.relu', 'tf.tanh', 'tf.softmax'],
+    relatedConcepts: ['neuronio', 'sigmoid', 'relu', 'tanh', 'softmax'],
+    introducedInLab: 'lab-11-neuron',
+    reinforcedInLabs: ['lab-12-activations'],
+  },
+  {
+    id: 'sigmoid',
+    title: 'Sigmoid',
+    shortDefinition: 'Ativação em forma de S que comprime a saída para (0, 1).',
+    fullDefinition:
+      'A sigmoid mapeia qualquer número real para o intervalo (0, 1), sendo ideal para a saída de uma classificação binária (probabilidade). Sua derivada é f(z)·(1 − f(z)), que fica próxima de zero para |z| grande (saturação), o que pode causar gradientes que desaparecem.',
+    mathematicalNotation: '\\sigma(z) = \\frac{1}{1 + e^{-z}}',
+    visualAnalogy: 'Um dimmer que nunca apaga nem acende totalmente.',
+    tfjsApi: ['tf.sigmoid'],
+    relatedConcepts: ['ativacao', 'derivada', 'classificacao'],
+    introducedInLab: 'lab-12-activations',
+  },
+  {
+    id: 'relu',
+    title: 'ReLU',
+    shortDefinition: 'Ativação que zera negativos e mantém positivos.',
+    fullDefinition:
+      'A ReLU (rectified linear unit) retorna max(0, z). É barata de calcular e evita a saturação para valores positivos, sendo o padrão em camadas ocultas. Para z < 0 a derivada é 0, o que pode "desligar" neurônios.',
+    mathematicalNotation: '\\text{ReLU}(z) = \\max(0, z)',
+    visualAnalogy: 'Uma catraca que só deixa passar em uma direção.',
+    tfjsApi: ['tf.relu'],
+    relatedConcepts: ['ativacao', 'derivada', 'camada'],
+    introducedInLab: 'lab-12-activations',
+  },
+  {
+    id: 'tanh',
+    title: 'Tanh',
+    shortDefinition: 'Ativação em forma de S centrada em zero, no intervalo (-1, 1).',
+    fullDefinition:
+      'A tangente hiperbólica comprime a saída para (−1, 1) e é centrada em zero, o que costuma acelerar o treino em relação à sigmoid. Sua derivada é 1 − tanh(z)² e também sofre saturação nas extremidades.',
+    mathematicalNotation: '\\tanh(z) = \\frac{e^{z} - e^{-z}}{e^{z} + e^{-z}}',
+    visualAnalogy: 'Um termômetro que marca de −1 a +1, com zero no meio.',
+    tfjsApi: ['tf.tanh'],
+    relatedConcepts: ['ativacao', 'derivada', 'sigmoid'],
+    introducedInLab: 'lab-12-activations',
+  },
+  {
+    id: 'softmax',
+    title: 'Softmax',
+    shortDefinition: 'Transforma um vetor de logits em probabilidades que somam 1.',
+    fullDefinition:
+      'A softmax aplica a exponencial a cada logit e divide pela soma, produzindo uma distribuição de probabilidade sobre várias classes. É usada na saída de classificações multiclasse, normalmente com rótulos one-hot e perda de entropia cruzada.',
+    mathematicalNotation: '\\text{softmax}(z)_i = \\frac{e^{z_i}}{\\sum_j e^{z_j}}',
+    visualAnalogy: 'Repartir 100% de confiança entre várias opções.',
+    tfjsApi: ['tf.softmax'],
+    relatedConcepts: ['ativacao', 'classificacao', 'backpropagation'],
+    introducedInLab: 'lab-12-activations',
+    reinforcedInLabs: ['lab-14-classification'],
+  },
+  {
+    id: 'derivada',
+    title: 'Derivada',
+    shortDefinition: 'Taxa de variação usada para propagar o erro no treino.',
+    fullDefinition:
+      'A derivada de uma função de ativação mede como a saída muda quando a entrada muda. A retropropagação multiplica essas derivadas ao longo da rede; derivadas pequenas em muitos termos fazem o gradiente "desaparecer" (vanishing gradient), dificultando o treino de redes profundas.',
+    mathematicalNotation: "f'(z) = \\frac{df}{dz}",
+    visualAnalogy: 'A inclinação da rampa num ponto: o quanto você sobe por passo.',
+    tfjsApi: ['tf.grad', 'tf.variableGrads'],
+    relatedConcepts: ['ativacao', 'gradiente', 'backpropagation'],
+    introducedInLab: 'lab-12-activations',
+  },
+  {
+    id: 'camada',
+    title: 'Camada',
+    shortDefinition: 'Conjunto de neurônios que processa as saídas da camada anterior.',
+    fullDefinition:
+      'Uma camada agrupa neurônios que compartilham as mesmas entradas. A camada de entrada recebe os dados; as camadas ocultas transformam as representações; a camada de saída produz a predição. Uma camada densa conecta todos os neurônios da camada anterior a todos os da seguinte.',
+    mathematicalNotation:
+      '\\mathbf{a}^{(l)} = f\\left(W^{(l)}\\mathbf{a}^{(l-1)} + \\mathbf{b}^{(l)}\\right)',
+    visualAnalogy: 'Estações de uma linha de montagem, cada uma transformando o que recebe.',
+    tfjsApi: ['tf.layers.dense', 'tf.sequential'],
+    relatedConcepts: ['neuronio', 'forward-propagation', 'backpropagation'],
+    introducedInLab: 'lab-13-neural-networks',
+  },
+  {
+    id: 'forward-propagation',
+    title: 'Forward propagation',
+    shortDefinition: 'Passagem das entradas pela rede até a saída.',
+    fullDefinition:
+      'A propagação direta calcula, camada a camada, as somas ponderadas e ativações até produzir a predição. É o passo usado tanto no treino quanto na inferência; o resultado é comparado aos rótulos para calcular a perda.',
+    mathematicalNotation: '\\hat{y} = f^{(L)}\\left(\\cdots f^{(1)}(\\mathbf{x})\\right)',
+    visualAnalogy: 'O sinal percorrendo os cabos do painel até a lâmpada acender.',
+    tfjsApi: ['model.predict', 'tf.matMul'],
+    relatedConcepts: ['camada', 'backpropagation', 'loss'],
+    introducedInLab: 'lab-13-neural-networks',
+  },
+  {
+    id: 'backpropagation',
+    title: 'Backpropagation',
+    shortDefinition: 'Cálculo dos gradientes do erro propagados da saída para a entrada.',
+    fullDefinition:
+      'A retropropagação aplica a regra da cadeia de trás para frente: partindo do erro na saída, calcula o gradiente de cada peso e bias. Esses gradientes alimentam a descida do gradiente. É o que torna viável treinar redes com milhares de parâmetros.',
+    mathematicalNotation:
+      "\\delta^{(l)} = \\left(W^{(l+1)T}\\delta^{(l+1)}\\right)\\odot f'(z^{(l)})",
+    visualAnalogy:
+      'Um boletim de erros percorrendo a linha de montagem ao contrário para corrigir cada estação.',
+    tfjsApi: ['tf.variableGrads', 'model.fit', 'tf.grad'],
+    relatedConcepts: ['forward-propagation', 'derivada', 'gradiente', 'treino'],
+    introducedInLab: 'lab-13-neural-networks',
+  },
+  {
+    id: 'treino',
+    title: 'Treino',
+    shortDefinition: 'Ciclo de forward, perda, backprop e atualização de pesos.',
+    fullDefinition:
+      'Treinar uma rede é repetir épocas: propagar os dados (forward), calcular a perda, retropropagar os gradientes e atualizar os pesos com a descida do gradiente. Ao longo das épocas a perda cai e a acurácia sobe, até estabilizar.',
+    mathematicalNotation: '\\theta \\leftarrow \\theta - \\eta \\nabla_\\theta J(\\theta)',
+    visualAnalogy:
+      'Uma sessão de estudos com exercícios, correção e ajuste da estratégia, repetida várias vezes.',
+    tfjsApi: ['model.fit', 'model.compile', 'optimizer.applyGradients'],
+    relatedConcepts: ['epoca', 'loss', 'backpropagation', 'gradiente'],
+    introducedInLab: 'lab-13-neural-networks',
+  },
+  {
+    id: 'classificacao',
+    title: 'Classificação',
+    shortDefinition: 'Prever a categoria (classe) de uma entrada.',
+    fullDefinition:
+      'Classificação atribui uma entrada a uma entre várias classes. Na binária a saída usa sigmoid; na multiclasse, softmax com rótulos one-hot e perda de entropia cruzada. A qualidade é medida por acurácia, matriz de confusão e outras métricas.',
+    mathematicalNotation: '\\hat{y} = \\arg\\max_k p_k',
+    visualAnalogy: 'Separar cartas em pilhas por naipe.',
+    tfjsApi: ['tf.argMax', 'tf.oneHot', 'tf.metrics.categoricalAccuracy'],
+    relatedConcepts: ['softmax', 'fronteira-de-decisao', 'label', 'loss'],
+    introducedInLab: 'lab-14-classification',
+  },
+  {
+    id: 'fronteira-de-decisao',
+    title: 'Fronteira de decisão',
+    shortDefinition: 'Região do espaço onde o modelo muda de classe prevista.',
+    fullDefinition:
+      'A fronteira de decisão é o conjunto de pontos em que o modelo está "em cima do muro" entre duas classes. Um neurônio linear produz uma reta; adicionar camadas ocultas permite fronteiras curvas e regiões complexas. Visualizar essa fronteira é uma forma direta de entender o que a rede aprendeu.',
+    mathematicalNotation: '\\{x : p(y=1\\mid x) = 0{,}5\\}',
+    visualAnalogy: 'A linha que separa os dois lados num campo de futebol.',
+    tfjsApi: ['model.predict', 'tf.argMax'],
+    relatedConcepts: ['classificacao', 'neuronio', 'camada'],
+    introducedInLab: 'lab-14-classification',
+  },
+  {
+    id: 'xor',
+    title: 'XOR',
+    shortDefinition: 'Problema não linearmente separável que exige camadas ocultas.',
+    fullDefinition:
+      'O XOR (ou-exclusivo) vale 1 quando exatamente uma das entradas é 1. Seus quatro pontos não podem ser separados por uma única reta, então um neurônio linear falha. Com uma camada oculta com pelo menos dois neurônios, a rede aprende uma fronteira não-linear e resolve o problema.',
+    mathematicalNotation: 'y = x_1 \\oplus x_2',
+    visualAnalogy:
+      'Dois interruptores que ligam a luz só quando estão em posições diferentes.',
+    tfjsApi: ['tf.layers.dense', 'tf.sequential'],
+    relatedConcepts: ['fronteira-de-decisao', 'camada', 'classificacao'],
+    introducedInLab: 'lab-14-classification',
+  },
+];
+
 /** Compact `[id, title]` fallback for concepts authored in later phases. */
 const CONCEPT_SEEDS: readonly [string, string][] = [
   ['dataset', 'Dataset'],
@@ -307,23 +523,6 @@ const CONCEPT_SEEDS: readonly [string, string][] = [
   ['gradiente', 'Gradiente'],
   ['convergencia', 'Convergência'],
   ['minimo-local', 'Mínimo local'],
-  ['neuronio', 'Neurônio'],
-  ['peso', 'Peso'],
-  ['bias', 'Bias'],
-  ['soma-ponderada', 'Soma ponderada'],
-  ['ativacao', 'Ativação'],
-  ['sigmoid', 'Sigmoid'],
-  ['relu', 'ReLU'],
-  ['tanh', 'Tanh'],
-  ['softmax', 'Softmax'],
-  ['derivada', 'Derivada'],
-  ['camada', 'Camada'],
-  ['forward-propagation', 'Forward propagation'],
-  ['backpropagation', 'Backpropagation'],
-  ['treino', 'Treino'],
-  ['classificacao', 'Classificação'],
-  ['fronteira-de-decisao', 'Fronteira de decisão'],
-  ['xor', 'XOR'],
   ['imagem', 'Imagem'],
   ['rgb', 'RGB'],
   ['grayscale', 'Grayscale'],
@@ -352,6 +551,7 @@ function toConcept(seed: ConceptSeed): ConceptSchema {
 /** All concept definitions, in authoring order. */
 export const CONCEPTS: readonly ConceptSchema[] = [
   ...TENSOR_CONCEPTS.map(toConcept),
+  ...NEURAL_CONCEPTS.map(toConcept),
   ...CONCEPT_SEEDS.map(([id, title]) =>
     toConcept({ id, title, shortDefinition: title, fullDefinition: title }),
   ),

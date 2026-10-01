@@ -51,6 +51,6 @@ describe('VisualizationRegistry', () => {
   it('returns undefined for an unregistered visualization type', () => {
     const registry = TestBed.inject(VisualizationRegistry);
 
-    expect(registry.resolve('network-graph')).toBeUndefined();
+    expect(registry.resolve('image-tensor')).toBeUndefined();
   });
 });
