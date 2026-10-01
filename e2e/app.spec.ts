@@ -5,4 +5,5 @@ test('application loads and renders the root component', async ({ page }) => {
 
   await expect(page).toHaveTitle('NeuralLab');
   await expect(page.getByRole('heading', { level: 1 })).toContainText('Hello, neural-lab');
+  await expect(page.getByText('Deployed automatically to GitHub Pages.')).toBeVisible();
 });
