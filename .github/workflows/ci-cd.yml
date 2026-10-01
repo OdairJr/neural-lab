@@ -44,6 +44,9 @@ jobs:
       - name: Validate OpenSpec
         run: npm run openspec:validate
 
+      - name: Validate content
+        run: npm run validate:content
+
       - name: Lint
         run: npm run lint
 
