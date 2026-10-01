@@ -125,27 +125,27 @@
 ## 4. Phase 3 — ML Fundamentals & Regression (Weeks 9-12)
 
 ### 4.1 Lab 8: ML Fundamentals
-- [ ] 4.1.1 Create `lab-08-ml-fundamentals` lazy feature — verify route works
-- [ ] 4.1.2 Implement dataset, features, labels, train/val split, loss, epoch, batch, lr — verify concepts registered
-- [ ] 4.1.3 Experiment: explore housing dataset (features, distributions, correlations) — verify dataset loads
-- [ ] 4.1.4 Visualization: scatter-plot matrix, correlation heatmap — verify charts render
-- [ ] 4.1.5 Challenge: identify which feature correlates most with price — verify challenge validates
+- [x] 4.1.1 Create `lab-08-ml-fundamentals` lazy feature — verify route works
+- [x] 4.1.2 Implement dataset, features, labels, train/val split, loss, epoch, batch, lr — verify concepts registered
+- [x] 4.1.3 Experiment: explore housing dataset (features, distributions, correlations) — verify dataset loads
+- [x] 4.1.4 Visualization: scatter-plot matrix, correlation heatmap — verify charts render
+- [x] 4.1.5 Challenge: identify which feature correlates most with price — verify challenge validates
 
 ### 4.2 Lab 9: Linear Regression
-- [ ] 4.2.1 Create `lab-09-linear-regression` lazy feature — verify route works
-- [ ] 4.2.2 Implement y = wx + b, MSE, fitting, prediction — verify math correct
-- [ ] 4.2.3 Experiment: interactive line fit (adjust w, b sliders → see MSE) — verify MSE updates live
-- [ ] 4.2.4 Visualization: scatter-plot with regression line, MSE curve — verify line fits data
-- [ ] 4.2.5 "Under the hood": shows gradient computation for MSE — verify panel shows gradients
-- [ ] 4.2.6 Challenge: find w,b that achieve MSE < threshold — verify challenge validates
+- [x] 4.2.1 Create `lab-09-linear-regression` lazy feature — verify route works
+- [x] 4.2.2 Implement y = wx + b, MSE, fitting, prediction — verify math correct
+- [x] 4.2.3 Experiment: interactive line fit (adjust w, b sliders → see MSE) — verify MSE updates live
+- [x] 4.2.4 Visualization: scatter-plot with regression line, MSE curve — verify line fits data
+- [x] 4.2.5 "Under the hood": shows gradient computation for MSE — verify panel shows gradients
+- [x] 4.2.6 Challenge: find w,b that achieve MSE < threshold — verify challenge validates
 
 ### 4.3 Lab 10: Gradient Descent
-- [ ] 4.3.1 Create `lab-10-gradient-descent` lazy feature — verify route works
-- [ ] 4.3.2 Implement cost surface, gradient, lr, convergence, divergence — verify concepts correct
-- [ ] 4.3.3 Experiment: 3D cost surface (MSE bowl) + ball rolling down (adjustable LR) — verify LR presets work
-- [ ] 4.3.4 Visualization: line-chart (loss per epoch), 2D contour with trajectory — verify charts animate
-- [ ] 4.3.5 Training in worker, streams metrics — verify worker communicates, UI responsive
-- [ ] 4.3.6 Challenge: find LR that converges in < 50 epochs without overshoot — verify challenge validates
+- [x] 4.3.1 Create `lab-10-gradient-descent` lazy feature — verify route works
+- [x] 4.3.2 Implement cost surface, gradient, lr, convergence, divergence — verify concepts correct
+- [x] 4.3.3 Experiment: 3D cost surface (MSE bowl) + ball rolling down (adjustable LR) — verify LR presets work
+- [x] 4.3.4 Visualization: line-chart (loss per epoch), 2D contour with trajectory — verify charts animate
+- [x] 4.3.5 Training in worker, streams metrics — verify worker communicates, UI responsive
+- [x] 4.3.6 Challenge: find LR that converges in < 50 epochs without overshoot — verify challenge validates
 
 ## 5. Phase 4 — Neurons, Activations & Networks (Weeks 13-18)
 

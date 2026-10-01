@@ -1,6 +1,6 @@
 import type { DataType } from '@tensorflow/tfjs';
 import { parseNumberList, parseShape, shapeSize } from '@core/utils';
-import type { ExperimentFn } from '@shared/experiments';
+import type { ExperimentFn, SyncExperimentFn } from '@shared/experiments';
 
 export const LAB_01_CREATE_TENSOR = 'lab-01-create-tensor';
 
@@ -10,7 +10,7 @@ export const LAB_01_CREATE_TENSOR = 'lab-01-create-tensor';
  * requested shape does not match the number of values it falls back to a rank-1
  * tensor so the experiment always renders something valid.
  */
-export const createTensorExperiment: ExperimentFn = (params, runtime) => {
+export const createTensorExperiment: SyncExperimentFn = (params, runtime) => {
   const values = parseNumberList(params['values']);
   const requestedShape = parseShape(params['shape']);
   const dtype: DataType = params['dtype'] === 'int32' ? 'int32' : 'float32';

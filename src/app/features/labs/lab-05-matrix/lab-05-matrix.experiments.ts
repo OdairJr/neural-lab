@@ -1,5 +1,5 @@
 import type { Tensor } from '@tensorflow/tfjs';
-import type { ExperimentFn } from '@shared/experiments';
+import type { ExperimentFn, SyncExperimentFn } from '@shared/experiments';
 
 export const LAB_05_MATRIX = 'lab-05-matrix';
 
@@ -39,7 +39,7 @@ export function toMatrix(values: readonly number[], shape: readonly number[]): n
  * of the quantities matrix. When `forcarErro` is enabled it deliberately builds
  * an incompatible price matrix and explains the shape rule instead of throwing.
  */
-export const matrixExperiment: ExperimentFn = (params, runtime) => {
+export const matrixExperiment: SyncExperimentFn = (params, runtime) => {
   const operation = typeof params['operacao'] === 'string' ? params['operacao'] : 'matMul';
   const forceError = params['forcarErro'] === true;
 

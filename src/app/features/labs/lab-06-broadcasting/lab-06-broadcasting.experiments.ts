@@ -1,4 +1,4 @@
-import type { ExperimentFn } from '@shared/experiments';
+import type { ExperimentFn, SyncExperimentFn } from '@shared/experiments';
 
 export const LAB_06_BROADCASTING = 'lab-06-broadcasting';
 
@@ -36,7 +36,7 @@ export function broadcastShape(
  * Experiment for Lab 6: demonstrates broadcasting in the Celsius → Fahrenheit
  * conversion, both vector+scalar and matrix+vector.
  */
-export const broadcastingExperiment: ExperimentFn = (params, runtime) => {
+export const broadcastingExperiment: SyncExperimentFn = (params, runtime) => {
   const mode = typeof params['modo'] === 'string' ? params['modo'] : 'vetor-escalar';
   const tf = runtime.tf;
 

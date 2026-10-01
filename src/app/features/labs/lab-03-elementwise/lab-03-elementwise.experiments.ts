@@ -1,6 +1,6 @@
 import type { Tensor } from '@tensorflow/tfjs';
 import { parseNumberList } from '@core/utils';
-import type { ExperimentFn } from '@shared/experiments';
+import type { ExperimentFn, SyncExperimentFn } from '@shared/experiments';
 import type { LabRuntimeService } from '@shared/runtime';
 
 export const LAB_03_ELEMENTWISE = 'lab-03-elementwise';
@@ -40,7 +40,7 @@ function applyBinary(
  * using an element-wise operation. Binary operations exercise broadcasting
  * ([3, 4] with [4]); `sqrt` is applied element-wise to the quantities.
  */
-export const elementwiseExperiment: ExperimentFn = (params, runtime) => {
+export const elementwiseExperiment: SyncExperimentFn = (params, runtime) => {
   const operation = typeof params['operacao'] === 'string' ? params['operacao'] : 'mul';
   const parsedPrices = parseNumberList(params['precos']);
   const pricesValid = parsedPrices.length === DEFAULT_PRICES.length;

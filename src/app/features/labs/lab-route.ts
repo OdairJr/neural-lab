@@ -1,7 +1,7 @@
 import type { Route } from '@angular/router';
 import type { LaboratoryConfig } from '@domain/content';
 import { LAB_CONFIG } from '@features/lab-shell';
-import { provideExperiments, type ExperimentFn } from '@shared/experiments';
+import { provideExperiments, type ExperimentProvider } from '@shared/experiments';
 import { LabRuntimeService } from '@shared/runtime';
 
 /**
@@ -12,7 +12,7 @@ import { LabRuntimeService } from '@shared/runtime';
  */
 export function labRoute(
   config: LaboratoryConfig,
-  experiments: Readonly<Record<string, ExperimentFn>>,
+  experiments: ExperimentProvider,
 ): Route {
   return {
     path: '',

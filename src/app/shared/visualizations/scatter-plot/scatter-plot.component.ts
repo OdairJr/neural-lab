@@ -145,7 +145,17 @@ export class ScatterPlotComponent implements OnDestroy {
     if (!data) {
       return [];
     }
-    return data.points.map((point) => [point.label ?? '', point.x, point.y]);
+    const rows: (string | number)[][] = data.points.map((point) => [
+      point.label ?? '',
+      point.x,
+      point.y,
+    ]);
+    for (const line of data.lines ?? []) {
+      for (const point of line.points) {
+        rows.push([line.label ?? 'linha', point.x, point.y]);
+      }
+    }
+    return rows;
   });
 
   protected onMouseMove(event: MouseEvent): void {
@@ -175,8 +185,9 @@ export class ScatterPlotComponent implements OnDestroy {
       const [xMin, xMax, yMin, yMax] = data.boundary.extent;
       return { xMin, xMax, yMin, yMax };
     }
-    const xs = data.points.map((point) => point.x);
-    const ys = data.points.map((point) => point.y);
+    const linePoints = (data.lines ?? []).flatMap((line) => line.points);
+    const xs = [...data.points.map((point) => point.x), ...linePoints.map((point) => point.x)];
+    const ys = [...data.points.map((point) => point.y), ...linePoints.map((point) => point.y)];
     return {
       xMin: Math.min(...xs, 0),
       xMax: Math.max(...xs, 1),
@@ -232,5 +243,25 @@ export class ScatterPlotComponent implements OnDestroy {
       context.fillStyle = classColor(point.label, this.classes());
       context.fill();
     }
+
+    const lineColors = ['#111827', '#7c3aed', '#e11d48', '#059669'];
+    (data.lines ?? []).forEach((line, index) => {
+      if (line.points.length === 0) {
+        return;
+      }
+      context.strokeStyle = line.color ?? lineColors[index % lineColors.length];
+      context.lineWidth = 2;
+      context.beginPath();
+      line.points.forEach((point, pointIndex) => {
+        const px = toX(point.x);
+        const py = toY(point.y);
+        if (pointIndex === 0) {
+          context.moveTo(px, py);
+        } else {
+          context.lineTo(px, py);
+        }
+      });
+      context.stroke();
+    });
   }
 }

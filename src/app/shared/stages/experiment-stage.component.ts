@@ -12,7 +12,7 @@ import {
 } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { debounceTime } from 'rxjs';
+import { Observable, debounceTime, type Subscription } from 'rxjs';
 import type {
   ExperimentConfig,
   ParameterConfig,
@@ -21,7 +21,11 @@ import type {
   VisualizationData,
 } from '@domain/content';
 import { VisualizationRegistry } from '../visualizations/visualization-registry.service';
-import { ExperimentRegistry, type ExperimentFn } from '../experiments/experiment-registry';
+import {
+  ExperimentRegistry,
+  type ExperimentFn,
+  type ExperimentResult,
+} from '../experiments/experiment-registry';
 import type { LabRuntimeService } from '../runtime/lab-runtime.service';
 import { StageLayoutComponent } from './stage-layout.component';
 import { StageCompletionEvent } from './stage-contract';
@@ -162,6 +166,7 @@ export class ExperimentStageComponent implements OnInit {
   protected readonly experimentData = signal<VisualizationData | null>(null);
   protected readonly unavailable = signal(false);
   private completed = false;
+  private streamSubscription: Subscription | null = null;
 
   protected readonly experimentConfig = computed<ExperimentConfig | null>(
     () => this.config().experimentConfig ?? null,
@@ -231,17 +236,36 @@ export class ExperimentStageComponent implements OnInit {
     }
     this.unavailable.set(false);
 
-    const result = fn(params, this.runtime());
+    // Cancel a previous stream (e.g. a running training session) before the
+    // next parameter-driven run starts.
+    this.streamSubscription?.unsubscribe();
+    this.streamSubscription = null;
+
+    const outcome = fn(params, this.runtime());
+    if (outcome instanceof Observable) {
+      this.streamSubscription = outcome
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
+          next: (result) => this.applyResult(experiment.experimentFnId, result),
+          error: () => this.unavailable.set(true),
+        });
+    } else {
+      this.applyResult(experiment.experimentFnId, outcome);
+    }
+
+    this.runtime().setExperimentState(EXPERIMENT_STAGE_TYPE, params);
+  }
+
+  private applyResult(operation: string, result: ExperimentResult): void {
     if (result.visualizationData) {
       this.experimentData.set(result.visualizationData);
     }
     if (result.tensors && result.tensors.length > 0) {
-      this.runtime().publishComputation(experiment.experimentFnId, {
+      this.runtime().publishComputation(operation, {
         inputs: result.tensors,
         code: result.codeSnippet,
       });
     }
-    this.runtime().setExperimentState(EXPERIMENT_STAGE_TYPE, params);
 
     if (!this.completed) {
       this.completed = true;

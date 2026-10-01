@@ -1,5 +1,5 @@
 import type { Tensor } from '@tensorflow/tfjs';
-import type { ExperimentFn } from '@shared/experiments';
+import type { ExperimentFn, SyncExperimentFn } from '@shared/experiments';
 import type { LabRuntimeService } from '@shared/runtime';
 
 export const LAB_04_REDUCTIONS = 'lab-04-reductions';
@@ -40,7 +40,7 @@ function labelsFor(length: number): string[] {
  * Experiment for Lab 4: reduces the city×day temperature matrix along the
  * selected axis and plots the resulting vector as a line chart.
  */
-export const reductionsExperiment: ExperimentFn = (params, runtime) => {
+export const reductionsExperiment: SyncExperimentFn = (params, runtime) => {
   const operation = typeof params['reducao'] === 'string' ? params['reducao'] : 'mean';
   const axis = Number(params['axis'] ?? 0);
 

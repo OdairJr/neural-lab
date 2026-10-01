@@ -1,4 +1,4 @@
-import type { ExperimentFn } from '@shared/experiments';
+import type { ExperimentFn, SyncExperimentFn } from '@shared/experiments';
 
 export const LAB_07_LINEAR_TRANSFORM = 'lab-07-linear-transform';
 
@@ -56,7 +56,7 @@ function round(value: number): number {
  * Experiment for Lab 7: applies a rotation + scale matrix to a set of 2D points
  * and plots the original and transformed points side by side on a scatter plot.
  */
-export const linearTransformExperiment: ExperimentFn = (params, runtime) => {
+export const linearTransformExperiment: SyncExperimentFn = (params, runtime) => {
   const angle = Number(params['angulo'] ?? 0);
   const scale = Number(params['escala'] ?? 1);
   const tf = runtime.tf;

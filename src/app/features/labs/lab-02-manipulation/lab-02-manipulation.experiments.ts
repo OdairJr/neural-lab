@@ -1,6 +1,6 @@
 import type { Tensor } from '@tensorflow/tfjs';
 import { parseShape, shapeSize } from '@core/utils';
-import type { ExperimentFn } from '@shared/experiments';
+import type { ExperimentFn, SyncExperimentFn } from '@shared/experiments';
 import type { LabRuntimeService } from '@shared/runtime';
 
 export const LAB_02_RESHAPE = 'lab-02-reshape';
@@ -85,7 +85,7 @@ function applyOperation(
  * tensor and publishes the resulting shape. Invalid squeeze/reshape requests
  * fall back to a safe result instead of throwing.
  */
-export const manipulateExperiment: ExperimentFn = (params, runtime) => {
+export const manipulateExperiment: SyncExperimentFn = (params, runtime) => {
   const operation = typeof params['operacao'] === 'string' ? params['operacao'] : 'reshape';
   const axis = Number(params['axis'] ?? 0);
   const requestedShape = parseShape(params['shape']);

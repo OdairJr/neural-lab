@@ -370,9 +370,18 @@ export interface LineChartData {
   title?: string;
 }
 
+/** A polyline drawn on top of a scatter plot (regression line, trajectory, ...). */
+export interface ScatterLine {
+  points: { x: number; y: number }[];
+  color?: string;
+  label?: string;
+}
+
 export interface ScatterPlotData {
   type: 'scatter-plot';
   points: ScatterPoint[];
+  /** Optional overlaid polylines, e.g. a fitted regression line or a trajectory. */
+  lines?: ScatterLine[];
   boundary?: DecisionBoundary;
   xLabel?: string;
   yLabel?: string;

@@ -57,6 +57,27 @@ export const LABS_ROUTES: Routes = [
       ),
   },
   {
+    path: '08-fundamentos-de-machine-learning',
+    loadChildren: () =>
+      import('./lab-08-ml-fundamentals/lab-08-ml-fundamentals.routes').then(
+        (m) => m.LAB_08_ML_FUNDAMENTALS_ROUTES,
+      ),
+  },
+  {
+    path: '09-regressao-linear',
+    loadChildren: () =>
+      import('./lab-09-linear-regression/lab-09-linear-regression.routes').then(
+        (m) => m.LAB_09_LINEAR_REGRESSION_ROUTES,
+      ),
+  },
+  {
+    path: '10-descida-do-gradiente',
+    loadChildren: () =>
+      import('./lab-10-gradient-descent/lab-10-gradient-descent.routes').then(
+        (m) => m.LAB_10_GRADIENT_DESCENT_ROUTES,
+      ),
+  },
+  {
     path: ':slug',
     providers: [LabRuntimeService],
     loadComponent: () =>
