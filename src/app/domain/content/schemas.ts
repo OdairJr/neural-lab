@@ -159,6 +159,8 @@ export type ExperimentConfig = z.infer<typeof experimentConfigSchema>;
 /* -------------------------------------------------------------------------- */
 
 const challengeCommon = {
+  /** Task description shown above the answer controls. */
+  prompt: z.string().optional(),
   hints: z.array(z.string()).optional(),
   maxAttempts: z.number().int().positive().nullable().optional(),
   showSolutionAfter: z.number().int().positive().optional(),

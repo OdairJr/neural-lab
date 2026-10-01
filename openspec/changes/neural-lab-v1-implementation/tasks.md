@@ -75,52 +75,52 @@
 ## 3. Phase 2 — Core Labs: Tensors & Operations (Weeks 5-8)
 
 ### 3.1 Lab 1: Tensor Fundamentals
-- [ ] 3.1.1 Create `lab-01-tensors` lazy feature with config — verify it loads at `/lab/01-fundamentos-de-tensores`
-- [ ] 3.1.2 Implement stages: contextualização, conceito, analogia, exemplo-visual (tensor-grid: temperatures), demonstração, experimentação (create tensors), desafio (match shape), explicação, código, resumo — verify all stages render
-- [ ] 3.1.3 Register concepts: tensor, scalar, vector, matrix, rank, shape, size, dtype — verify concepts appear in glossary
-- [ ] 3.1.4 Implement experiment: create tensor from array, inspect shape/rank/dtype — verify tensor created, displayed in panel
-- [ ] 3.1.5 Validate complete lab flow: progress saved, all stages functional — verify lab marked complete in journey
+- [x] 3.1.1 Create `lab-01-tensors` lazy feature with config — verify it loads at `/lab/01-fundamentos-de-tensores`
+- [x] 3.1.2 Implement stages: contextualização, conceito, analogia, exemplo-visual (tensor-grid: temperatures), demonstração, experimentação (create tensors), desafio (match shape), explicação, código, resumo — verify all stages render
+- [x] 3.1.3 Register concepts: tensor, scalar, vector, matrix, rank, shape, size, dtype — verify concepts appear in glossary
+- [x] 3.1.4 Implement experiment: create tensor from array, inspect shape/rank/dtype — verify tensor created, displayed in panel
+- [x] 3.1.5 Validate complete lab flow: progress saved, all stages functional — verify lab marked complete in journey
 
 ### 3.2 Lab 2: Tensor Manipulation
-- [ ] 3.2.1 Create `lab-02-manipulation` lazy feature — verify route works
-- [ ] 3.2.2 Implement reshape, flatten, expandDims, squeeze experiments — verify operations produce correct shapes
-- [ ] 3.2.3 Experiment: reshape temperature tensor for weekly/monthly views — verify reshaped data displayed
-- [ ] 3.2.4 Challenge: transform (3,4,5) → (5,3,4) using allowed ops — verify challenge validates correct solution
+- [x] 3.2.1 Create `lab-02-manipulation` lazy feature — verify route works
+- [x] 3.2.2 Implement reshape, flatten, expandDims, squeeze experiments — verify operations produce correct shapes
+- [x] 3.2.3 Experiment: reshape temperature tensor for weekly/monthly views — verify reshaped data displayed
+- [x] 3.2.4 Challenge: transform (3,4,5) → (5,3,4) using allowed ops — verify challenge validates correct solution
 
 ### 3.3 Lab 3: Element-wise Operations
-- [ ] 3.3.1 Create `lab-03-elementwise` lazy feature — verify route works
-- [ ] 3.3.2 Implement add, sub, mul, div, pow, sqrt experiments — verify operations correct
-- [ ] 3.3.3 Experiment: recipe costs (ingredient vectors × price vectors) — verify broadcasting works implicitly
-- [ ] 3.3.4 Visualization: tensor-grid showing before/after — verify grid displays correctly
-- [ ] 3.3.5 Challenge: compute total cost per recipe — verify challenge validates
+- [x] 3.3.1 Create `lab-03-elementwise` lazy feature — verify route works
+- [x] 3.3.2 Implement add, sub, mul, div, pow, sqrt experiments — verify operations correct
+- [x] 3.3.3 Experiment: recipe costs (ingredient vectors × price vectors) — verify broadcasting works implicitly
+- [x] 3.3.4 Visualization: tensor-grid showing before/after — verify grid displays correctly
+- [x] 3.3.5 Challenge: compute total cost per recipe — verify challenge validates
 
 ### 3.4 Lab 4: Reduction Operations
-- [ ] 3.4.1 Create `lab-04-reductions` lazy feature — verify route works
-- [ ] 3.4.2 Implement sum, mean, min, max along axes — verify axis parameter works (0 vs 1 vs -1)
-- [ ] 3.4.3 Experiment: temperature statistics (avg per city, max per day) — verify stats correct
-- [ ] 3.4.4 Visualization: line-chart (daily avg), heatmap (city×day) — verify charts render
-- [ ] 3.4.5 Challenge: find city with highest temp variance — verify challenge validates
+- [x] 3.4.1 Create `lab-04-reductions` lazy feature — verify route works
+- [x] 3.4.2 Implement sum, mean, min, max along axes — verify axis parameter works (0 vs 1 vs -1)
+- [x] 3.4.3 Experiment: temperature statistics (avg per city, max per day) — verify stats correct
+- [x] 3.4.4 Visualization: line-chart (daily avg), heatmap (city×day) — verify charts render
+- [x] 3.4.5 Challenge: find city with highest temp variance — verify challenge validates
 
 ### 3.5 Lab 5: Matrix Operations
-- [ ] 3.5.1 Create `lab-05-matrix` lazy feature — verify route works
-- [ ] 3.5.2 Implement transpose, matMul — verify matMul shape rules enforced
-- [ ] 3.5.3 Experiment: product quantities (3×5) — prices (5×1) = costs (3×1) — verify result correct
-- [ ] 3.5.4 Visualization: matrix-heatmap for each matrix, network-graph for matMul — verify visualizations render
-- [ ] 3.5.5 Challenge: compute revenue for different price scenarios — verify challenge validated
+- [x] 3.5.1 Create `lab-05-matrix` lazy feature — verify route works
+- [x] 3.5.2 Implement transpose, matMul — verify matMul shape rules enforced
+- [x] 3.5.3 Experiment: product quantities (3×5) — prices (5×1) = costs (3×1) — verify result correct
+- [x] 3.5.4 Visualization: matrix-heatmap for each matrix, network-graph for matMul — verify visualizations render
+- [x] 3.5.5 Challenge: compute revenue for different price scenarios — verify challenge validated
 
 ### 3.6 Lab 6: Broadcasting
-- [ ] 3.6.1 Create `lab-06-broadcasting` lazy feature — verify route works
-- [ ] 3.6.2 Implement broadcasting rules, compatible shapes, implicit expansion — verify shape alignment correct
-- [ ] 3.6.3 Experiment: Celsius → Fahrenheit for multiple cities (vector + scalar, matrix + vector) — verify conversion correct
-- [ ] 3.6.4 Visualization: step-by-step broadcast animation (shape alignment) — verify animation shows broadcasting
-- [ ] 3.6.5 Challenge: predict output shape for 5 broadcast scenarios — verify challenge covers edge cases
+- [x] 3.6.1 Create `lab-06-broadcasting` lazy feature — verify route works
+- [x] 3.6.2 Implement broadcasting rules, compatible shapes, implicit expansion — verify shape alignment correct
+- [x] 3.6.3 Experiment: Celsius → Fahrenheit for multiple cities (vector + scalar, matrix + vector) — verify conversion correct
+- [x] 3.6.4 Visualization: step-by-step broadcast animation (shape alignment) — verify animation shows broadcasting
+- [x] 3.6.5 Challenge: predict output shape for 5 broadcast scenarios — verify challenge covers edge cases
 
 ### 3.7 Lab 7: Applied Linear Algebra
-- [ ] 3.7.1 Create `lab-07-linear-algebra` lazy feature — verify route works
-- [ ] 3.7.2 Implement vectors, dot product, linear transformations — verify math correct
-- [ ] 3.7.3 Experiment: 2D points → rotation/scaling matrices → transformed points — verify geometric transformation correct
-- [ ] 3.7.4 Visualization: scatter-plot with before/after, transformation matrix display — verify plot shows transformation
-- [ ] 3.7.5 Challenge: find transformation matrix that maps set A to set B — verify challenge validates
+- [x] 3.7.1 Create `lab-07-linear-algebra` lazy feature — verify route works
+- [x] 3.7.2 Implement vectors, dot product, linear transformations — verify math correct
+- [x] 3.7.3 Experiment: 2D points → rotation/scaling matrices → transformed points — verify geometric transformation correct
+- [x] 3.7.4 Visualization: scatter-plot with before/after, transformation matrix display — verify plot shows transformation
+- [x] 3.7.5 Challenge: find transformation matrix that maps set A to set B — verify challenge validates
 
 ## 4. Phase 3 — ML Fundamentals & Regression (Weeks 9-12)
 

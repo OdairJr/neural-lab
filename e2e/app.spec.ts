@@ -26,14 +26,14 @@ test('renders a lab shell from a deep link and completes a stage', async ({ page
   await expect(page.getByRole('heading', { level: 1 })).toContainText(
     'Fundamentos de Tensores',
   );
-  await expect(page.locator('app-stage-navigator button')).toHaveCount(4);
+  await expect(page.locator('app-stage-navigator button')).toHaveCount(10);
 
   const ring = page.locator('app-progress-ring svg');
   await expect(ring).toHaveAttribute('aria-valuenow', '0');
 
   await page.getByRole('button', { name: 'Marcar etapa como concluída' }).first().click();
 
-  await expect(ring).toHaveAttribute('aria-valuenow', '25');
+  await expect(ring).toHaveAttribute('aria-valuenow', '10');
   await expect(page.locator('app-stage-navigator')).toContainText('Concluída');
 });
 
@@ -43,4 +43,13 @@ test('shows a not-found message for an unknown lab slug', async ({ page }) => {
   await expect(
     page.getByRole('heading', { level: 1, name: 'Laboratório não encontrado' }),
   ).toBeVisible();
+});
+
+test('loads a phase-2 lab with its ten stages', async ({ page }) => {
+  await page.goto('/#/lab/03-operacoes-elemento-a-elemento');
+
+  await expect(page.getByRole('heading', { level: 1 })).toContainText(
+    'Operações Elemento a Elemento',
+  );
+  await expect(page.locator('app-stage-navigator button')).toHaveCount(10);
 });

@@ -24,6 +24,10 @@ import { validateChallenge, type ChallengeInput, type ChallengeResult } from '..
         @if (validation(); as current) {
           <p class="text-sm text-text/80">Resolva o desafio para concluir esta etapa.</p>
 
+          @if (current.prompt) {
+            <p class="whitespace-pre-line text-sm text-text/90">{{ current.prompt }}</p>
+          }
+
           @switch (current.type) {
             @case ('multiple-choice') {
               <fieldset class="space-y-2">

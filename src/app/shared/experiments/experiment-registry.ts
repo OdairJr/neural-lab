@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable, provideEnvironmentInitializer } from '@angular/core';
+import type { EnvironmentProviders } from '@angular/core';
 import type { Tensor } from '@tensorflow/tfjs';
 import type { VisualizationData } from '@domain/content';
 import type { LabRuntimeService } from '../runtime/lab-runtime.service';
@@ -48,4 +49,20 @@ export class ExperimentRegistry {
   clear(): void {
     this.functions.clear();
   }
+}
+
+/**
+ * Route-level provider that registers a set of experiment functions when the
+ * owning lab feature is loaded. Keeping registration behind a lazy route means
+ * a lab's experiment code is only downloaded when that lab is visited.
+ */
+export function provideExperiments(
+  functions: Readonly<Record<string, ExperimentFn>>,
+): EnvironmentProviders {
+  return provideEnvironmentInitializer(() => {
+    const registry = inject(ExperimentRegistry);
+    for (const [id, fn] of Object.entries(functions)) {
+      registry.register(id, fn);
+    }
+  });
 }
