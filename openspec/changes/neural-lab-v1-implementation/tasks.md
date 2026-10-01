@@ -39,38 +39,38 @@
 ## 2. Phase 1 — Lab Infrastructure (Weeks 3-4)
 
 ### 2.1 Lab Shell & Runtime
-- [ ] 2.1.1 Create `LabShellComponent`: header (title, progress ring, panel toggle), sidebar (stage navigator), main (stage content), panel (under the hood) — verify shell renders with empty lab
-- [ ] 2.1.2 Create `StageRendererComponent`: dynamic component loader via `ComponentRegistry` — verify renders stage component from config
-- [ ] 2.1.3 Create `StageNavigatorComponent`: shows all 10 stages with completion status, click navigation — verify completed stages clickable, future locked
-- [ ] 2.1.4 Create `LabRuntimeService` (provided in the lab's route providers): `tf`, `tidy()`, `track()`, `createTensor()`, `getSnapshot()`, `set/getExperimentState()`, `dispose()` — verify tensors disposed on component destroy
-- [ ] 2.1.5 Create `ComponentRegistry` (Map<string, ComponentType>) — verify resolves registered components
-- [ ] 2.1.6 Create `VisualizationRegistry` (Map<string, ComponentType>) — verify resolves viz components
-- [ ] 2.1.7 Create `UnderTheHoodPanelComponent` + `CodeGeneratorService` — verify panel shows tensor data, code copy works
-- [ ] 2.1.8 Configure route `/lab/:slug` → loads lab feature routes, renders shell — verify lazy loading works, previous lab disposed
+- [x] 2.1.1 Create `LabShellComponent`: header (title, progress ring, panel toggle), sidebar (stage navigator), main (stage content), panel (under the hood) — verify shell renders with empty lab
+- [x] 2.1.2 Create `StageRendererComponent`: dynamic component loader via `ComponentRegistry` — verify renders stage component from config
+- [x] 2.1.3 Create `StageNavigatorComponent`: shows all 10 stages with completion status, click navigation — verify completed stages clickable, future locked
+- [x] 2.1.4 Create `LabRuntimeService` (provided in the lab's route providers): `tf`, `tidy()`, `track()`, `createTensor()`, `getSnapshot()`, `set/getExperimentState()`, `dispose()` — verify tensors disposed on component destroy
+- [x] 2.1.5 Create `ComponentRegistry` (Map<string, ComponentType>) — verify resolves registered components
+- [x] 2.1.6 Create `VisualizationRegistry` (Map<string, ComponentType>) — verify resolves viz components
+- [x] 2.1.7 Create `UnderTheHoodPanelComponent` + `CodeGeneratorService` — verify panel shows tensor data, code copy works
+- [x] 2.1.8 Configure route `/lab/:slug` → loads lab feature routes, renders shell — verify lazy loading works, previous lab disposed
 
 ### 2.2 Stage Base Components
-- [ ] 2.2.1 Create `MarkdownStageComponent` (renders markdown with frontmatter) — verify renders markdown correctly
-- [ ] 2.2.2 Create `ConceptCardStageComponent` (reads from concept registry) — verify displays concept definition
-- [ ] 2.2.3 Create `VisualizationStageComponent` (wraps registry viz) — verify renders visualization from config
-- [ ] 2.2.4 Create `ExperimentStageComponent`: reactive form from params, debounced `experimentFn` (150ms), live viz update — verify parameter changes update visualization
-- [ ] 2.2.5 Create `ChallengeStageComponent`: validation types (parameter-match, tensor-value, multiple-choice) — verify validation passes/fails correctly
-- [ ] 2.2.6 Create `CodeViewStageComponent`: view modes (essential/annotated/full), copy button — verify code displays in all modes, copy works
-- [ ] 2.2.7 Implement stage completion tracking + `stageComplete` emission — verify stage marks complete, progress updates
+- [x] 2.2.1 Create `MarkdownStageComponent` (renders markdown with frontmatter) — verify renders markdown correctly
+- [x] 2.2.2 Create `ConceptCardStageComponent` (reads from concept registry) — verify displays concept definition
+- [x] 2.2.3 Create `VisualizationStageComponent` (wraps registry viz) — verify renders visualization from config
+- [x] 2.2.4 Create `ExperimentStageComponent`: reactive form from params, debounced `experimentFn` (150ms), live viz update — verify parameter changes update visualization
+- [x] 2.2.5 Create `ChallengeStageComponent`: validation types (parameter-match, tensor-value, multiple-choice) — verify validation passes/fails correctly
+- [x] 2.2.6 Create `CodeViewStageComponent`: view modes (essential/annotated/full), copy button — verify code displays in all modes, copy works
+- [x] 2.2.7 Implement stage completion tracking + `stageComplete` emission — verify stage marks complete, progress updates
 
 ### 2.3 Visualization Engine (Core Set)
 - [ ] 2.3.1 Create `TensorGridComponent`: rank 1-3, slice selector, value tooltip, responsive — verify visual regression test passes
-- [ ] 2.3.2 Create `MatrixHeatmapComponent`: color scale, labels, hover values — verify renders matrix correctly
-- [ ] 2.3.3 Create `LineChartComponent` (Chart.js): multi-series, epoch animation, tooltip — verify chart updates on data change
-- [ ] 2.3.4 Create `ScatterPlotComponent`: classes, decision boundary overlay, hover details — verify decision boundary renders
-- [ ] 2.3.5 Create `ActivationCurveComponent`: 4 functions, adjustable x-range, derivative toggle — verify curves match mathematical functions
-- [ ] 2.3.6 Create `MemoryTimelineComponent`: snapshots, markers, hover stats — verify timeline shows memory events
+- [x] 2.3.2 Create `MatrixHeatmapComponent`: color scale, labels, hover values — verify renders matrix correctly
+- [x] 2.3.3 Create `LineChartComponent` (Chart.js): multi-series, epoch animation, tooltip — verify chart updates on data change
+- [x] 2.3.4 Create `ScatterPlotComponent`: classes, decision boundary overlay, hover details — verify decision boundary renders
+- [x] 2.3.5 Create `ActivationCurveComponent`: 4 functions, adjustable x-range, derivative toggle — verify curves match mathematical functions
+- [x] 2.3.6 Create `MemoryTimelineComponent`: snapshots, markers, hover stats — verify timeline shows memory events
 - [ ] 2.3.7 Ensure all visualizations: data table alternative, color-blind patterns, reduced motion — verify axe-core passes, reduced motion works
 
 ### 2.4 Content Schema & Validation
-- [ ] 2.4.1 Define Zod schemas in `domain/content`: `LaboratoryConfig`, `StageConfig`, `ExperimentConfig`, `ChallengeValidation`, `VisualizationConfig`, `Concept` — verify TypeScript types generated
-- [ ] 2.4.2 Create TypeScript configs for all 16 labs in `src/app/educational-content/lab-configs/` (stubs with stages) — verify imports work
-- [ ] 2.4.3 Create `scripts/validate-content.mjs` (Node script, `npm run validate:content`): validates all configs at build — verify it fails on an invalid config
-- [ ] 2.4.4 Integrate content validation in CI — verify build fails on invalid lab config
+- [x] 2.4.1 Define Zod schemas in `domain/content`: `LaboratoryConfig`, `StageConfig`, `ExperimentConfig`, `ChallengeValidation`, `VisualizationConfig`, `Concept` — verify TypeScript types generated
+- [x] 2.4.2 Create TypeScript configs for all 16 labs in `src/app/educational-content/lab-configs/` (stubs with stages) — verify imports work
+- [x] 2.4.3 Create `scripts/validate-content.mjs` (Node script, `npm run validate:content`): validates all configs at build — verify it fails on an invalid config
+- [x] 2.4.4 Integrate content validation in CI — verify build fails on invalid lab config
 
 ## 3. Phase 2 — Core Labs: Tensors & Operations (Weeks 5-8)
 

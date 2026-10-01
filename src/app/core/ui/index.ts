@@ -13,7 +13,7 @@ export {
 export { ModalComponent } from './modal/modal.component';
 export { PanelComponent } from './panel/panel.component';
 export { ProgressRingComponent } from './progress-ring/progress-ring.component';
-export { ReducedMotionMixin, type ReducedMotionHost } from './reduced-motion.mixin';
+export { ReducedMotionMixin, prefersReducedMotionSignal, type ReducedMotionHost } from './reduced-motion.mixin';
 export { TabsComponent, type TabItem } from './tabs/tabs.component';
 export { ThemeService } from './theme.service';
 export {

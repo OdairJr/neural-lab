@@ -23,6 +23,15 @@ function reducedMotionSignal(): Signal<boolean> {
 }
 
 /**
+ * Exposes the shared OS reduced-motion signal. Useful for non-CSS consumers
+ * such as canvas/Chart.js visualizations that must disable animation
+ * programmatically.
+ */
+export function prefersReducedMotionSignal(): Signal<boolean> {
+  return reducedMotionSignal();
+}
+
+/**
  * Mixin that exposes a reactive `prefersReducedMotion` signal reflecting the
  * `(prefers-reduced-motion: reduce)` media query. Apply it to animated
  * components so motion can be disabled without duplicating the logic.
