@@ -12,7 +12,9 @@ export default defineConfig({
   reporter: [['list'], ['html', { open: 'never' }]],
   use: {
     baseURL: 'http://127.0.0.1:4173',
-    trace: 'retain-on-failure',
+    // Task 1.1.8: trace on retry in CI (where retries happen), retain-on-failure
+    // locally (retries are disabled, so this keeps the trace of the first failure).
+    trace: process.env.CI ? 'on-first-retry' : 'retain-on-failure',
     screenshot: 'only-on-failure',
     // Task 9.1.4: record a video for every run so UI review is possible without
     // running the project. Playwright writes them under the output directory

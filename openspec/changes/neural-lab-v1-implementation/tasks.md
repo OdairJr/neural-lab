@@ -10,7 +10,7 @@
 - [x] 1.1.5 Configure path aliases in `tsconfig.json`: `@core/*`, `@domain/*`, `@shared/*`, `@features/*`, `@content/*` — verify imports work in a test file
 - [x] 1.1.6 Configure GitHub Actions CI workflow: OpenSpec validate, lint, unit tests, build, E2E (extend `.github/workflows/ci-cd.yml`) — verify workflow runs on PR
 - [x] 1.1.7 Initialize OpenSpec in repo: `openspec init --tools opencode` — verify `openspec/` and `.opencode/` exist
-- [ ] 1.1.8 Configure Playwright (`playwright.config.ts`): video on, screenshot on failure + key validation points, trace on retry — verify `npx playwright --version`
+- [x] 1.1.8 Configure Playwright (`playwright.config.ts`): video on, screenshot on failure + key validation points, trace on retry — verify `npx playwright --version`
 
 ### 1.2 TF.js Integration & Memory Layer
 - [x] 1.2.1 Install `@tensorflow/tfjs`, `@tensorflow/tfjs-vis` — verify `npm ls @tensorflow/tfjs`
@@ -26,7 +26,7 @@
 - [x] 1.3.3 Implement `core/ui` primitives: Button, Card, Panel, Badge, Tooltip, Modal, Tabs, ProgressRing, CodeBlock, CopyButton — verify Storybook/visual regression for each
 - [x] 1.3.4 Create `ThemeService`: persists preference, toggles `data-theme` on `<html>` — verify theme persists across refresh
 - [x] 1.3.5 Create `FocusTrapDirective`, `LiveRegionService`, `ReducedMotionMixin` — verify axe-core passes on modal, live region announces
-- [ ] 1.3.6 Run accessibility audit baseline: `npm run test:a11y` — verify 0 violations AA
+- [x] 1.3.6 Run accessibility audit baseline: `npm run test:a11y` — verify 0 violations AA
 
 ### 1.4 Routing, Layout, Progress Persistence
 - [x] 1.4.1 Create `app.routes.ts` with lazy routes for all sections (hash location preserved) — verify `npm run start` loads routes
