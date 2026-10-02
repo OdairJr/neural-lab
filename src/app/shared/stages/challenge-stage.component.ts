@@ -119,12 +119,12 @@ import { validateChallenge, type ChallengeInput, type ChallengeResult } from '..
           <div class="flex flex-wrap items-center gap-3">
             <button
               type="button"
-              class="inline-flex h-10 items-center rounded-nl bg-primary px-4 text-sm font-medium text-white hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+              class="inline-flex h-10 items-center rounded-nl bg-primary px-4 text-sm font-medium text-on-primary hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
               (click)="submit()"
             >
               Verificar resposta
             </button>
-            <span class="text-xs text-text/60">Tentativas: {{ attempts() }}</span>
+            <span class="text-xs text-text/70">Tentativas: {{ attempts() }}</span>
           </div>
 
           @if (result(); as outcome) {

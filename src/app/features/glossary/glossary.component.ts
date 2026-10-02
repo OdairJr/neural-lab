@@ -46,7 +46,7 @@ import { ConceptDetailComponent } from './concept-detail.component';
             />
           </div>
 
-          <p class="text-xs text-text/60" role="status">
+          <p class="text-xs text-text/70" role="status">
             {{ filtered().length }} de {{ concepts().length }} termos
           </p>
 
@@ -62,7 +62,7 @@ import { ConceptDetailComponent } from './concept-detail.component';
                   >
                     <span class="block text-sm font-medium">{{ concept.title }}</span>
                     <span class="block text-xs text-text/70">{{ concept.shortDefinition }}</span>
-                    <span class="mt-1 block text-xs text-text/60">
+                    <span class="mt-1 block text-xs text-text/70">
                       {{ relatedLabCount(concept.id) }} laboratórios
                     </span>
                   </button>

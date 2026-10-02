@@ -58,14 +58,14 @@ let instanceCounter = 0;
               [style.transition]="reducedMotion() ? 'none' : null"
               class="w-full max-w-[220px] rounded-nl border border-border [image-rendering:pixelated]"
             ></canvas>
-            <p class="text-xs text-text/60">
+            <p class="text-xs text-text/70">
               {{ current.original.width }}×{{ current.original.height }} · canal {{ channel() }}
             </p>
           </div>
 
           <div class="space-y-1">
             <h4 class="text-xs font-semibold">Valores do tensor</h4>
-            <p class="text-xs text-text/60">
+            <p class="text-xs text-text/70">
               shape [{{ shapeLabel() }}] · {{ current.tensor.size }} valores
               @if (current.tensor.truncated) {
                 <span>(amostra)</span>

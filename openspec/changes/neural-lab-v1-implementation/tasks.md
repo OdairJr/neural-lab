@@ -215,13 +215,13 @@
 - [x] 7.2.4 Export includes analytics (opt-in) — verify export JSON contains analytics
 
 ### 7.3 Accessibility & Performance Audit
-- [ ] 7.3.1 Run full axe-core audit — verify 0 violations AA
-- [ ] 7.3.2 Keyboard testing all flows — verify tab order, focus management
+- [x] 7.3.1 Run full axe-core audit — verify 0 violations AA
+- [x] 7.3.2 Keyboard testing all flows — verify tab order, focus management
 - [ ] 7.3.3 Screen reader testing (NVDA/VoiceOver) — verify announcements work
 - [ ] 7.3.4 Lighthouse audit: Performance > 90, Accessibility > 95, Best Practices > 90 — verify scores
-- [ ] 7.3.5 Bundle analysis: budgets met (initial < 500KB, lab chunks < 100KB) - verify `npm run build` enforces Angular budgets
+- [x] 7.3.5 Bundle analysis: budgets met (initial < 500KB, lab chunks < 100KB) - verify `npm run build` enforces Angular budgets
 - [ ] 7.3.6 Memory stress test: 30 min session, no leaks — verify `tf.memory()` stable
-- [ ] 7.3.7 Document results in `AUDIT_RESULTS.md` — verify file exists
+- [x] 7.3.7 Document results in `AUDIT_RESULTS.md` — verify file exists
 
 ### 7.4 Documentation & Release Prep
 - [ ] 7.4.1 Write `README.md`: project overview, quick start, architecture summary — verify renders on GitHub

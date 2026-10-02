@@ -27,7 +27,7 @@ import { BadgeComponent, CardComponent } from '@core/ui';
               <app-card>
                 <div class="flex items-start gap-4">
                   <span
-                    class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-bold text-white"
+                    class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-bold text-on-primary"
                     aria-hidden="true"
                   >
                     {{ lab.number }}
@@ -38,7 +38,7 @@ import { BadgeComponent, CardComponent } from '@core/ui';
                       <app-badge variant="neutral">{{ categoryLabel(lab.category) }}</app-badge>
                     </div>
                     <p class="text-sm text-text/80">{{ lab.description }}</p>
-                    <p class="text-xs text-text/60">{{ lab.estimatedMinutes }} min</p>
+                    <p class="text-xs text-text/70">{{ lab.estimatedMinutes }} min</p>
                   </div>
                 </div>
               </app-card>

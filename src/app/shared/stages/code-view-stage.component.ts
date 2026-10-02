@@ -27,7 +27,7 @@ const MODES: readonly { id: CodeViewMode; label: string }[] = [
               [class]="
                 'rounded-nl px-3 py-1.5 text-xs font-medium focus-visible:outline-2 focus-visible:outline-primary ' +
                 (activeMode() === mode.id
-                  ? 'bg-primary text-white'
+                  ? 'bg-primary text-on-primary'
                   : 'border border-border bg-surface text-text hover:bg-bg')
               "
               (click)="activeMode.set(mode.id)"

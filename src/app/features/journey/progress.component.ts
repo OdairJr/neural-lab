@@ -41,22 +41,22 @@ import {
         <app-progress-ring [value]="overallPercent()" [size]="120" label="Progresso geral" />
         <dl class="grid grid-cols-2 gap-x-8 gap-y-2 text-sm sm:grid-cols-4">
           <div>
-            <dt class="text-xs text-text/60">Progresso geral</dt>
+            <dt class="text-xs text-text/70">Progresso geral</dt>
             <dd class="text-2xl font-bold">{{ overallPercent() }}%</dd>
           </div>
           <div>
-            <dt class="text-xs text-text/60">Laboratórios</dt>
+            <dt class="text-xs text-text/70">Laboratórios</dt>
             <dd class="text-2xl font-bold">{{ completedCount() }}</dd>
-            <dd class="text-xs text-text/60">de {{ totalLabs }} concluídos</dd>
+            <dd class="text-xs text-text/70">de {{ totalLabs }} concluídos</dd>
           </div>
           <div>
-            <dt class="text-xs text-text/60">Tempo total</dt>
+            <dt class="text-xs text-text/70">Tempo total</dt>
             <dd class="text-2xl font-bold">{{ formatDuration(totalTimeMs()) }}</dd>
           </div>
           <div>
-            <dt class="text-xs text-text/60">Sequência</dt>
+            <dt class="text-xs text-text/70">Sequência</dt>
             <dd class="text-2xl font-bold">{{ streak() }}</dd>
-            <dd class="text-xs text-text/60">
+            <dd class="text-xs text-text/70">
               {{ streak() === 1 ? 'dia consecutivo' : 'dias consecutivos' }}
             </dd>
           </div>

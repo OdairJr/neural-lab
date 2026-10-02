@@ -63,7 +63,7 @@ interface ThemeOption {
           />
           Incluir análises no arquivo
         </label>
-        <p class="mt-1 text-xs text-text/60">
+        <p class="mt-1 text-xs text-text/70">
           Quando ativado, o arquivo exportado inclui os eventos de uso locais (tempo, tentativas
           e navegação).
         </p>

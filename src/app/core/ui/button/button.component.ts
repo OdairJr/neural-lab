@@ -11,7 +11,7 @@ const BASE =
   'disabled:cursor-not-allowed disabled:opacity-50';
 
 const VARIANTS: Record<ButtonVariant, string> = {
-  primary: 'bg-primary text-white hover:opacity-90',
+  primary: 'bg-primary text-on-primary hover:opacity-90',
   secondary: 'border border-border bg-surface text-text hover:bg-bg',
   ghost: 'text-text hover:bg-surface',
   danger: 'bg-red-600 text-white hover:bg-red-700',

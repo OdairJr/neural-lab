@@ -98,7 +98,7 @@ import { UnderTheHoodPanelComponent } from './under-the-hood-panel.component';
                 Etapa anterior
               </button>
 
-              <span class="text-xs text-text/60">
+              <span class="text-xs text-text/70">
                 Etapa {{ currentIndex() + 1 }} de {{ current.stages.length }}
               </span>
 

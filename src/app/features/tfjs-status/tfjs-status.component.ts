@@ -31,19 +31,19 @@ import { BadgeComponent, ButtonComponent, CardComponent } from '@core/ui';
         @if (memory(); as snapshot) {
           <dl class="grid grid-cols-2 gap-2 text-sm sm:grid-cols-4">
             <div>
-              <dt class="text-text/60">Tensores</dt>
+              <dt class="text-text/70">Tensores</dt>
               <dd class="font-mono">{{ snapshot.numTensors }}</dd>
             </div>
             <div>
-              <dt class="text-text/60">Bytes</dt>
+              <dt class="text-text/70">Bytes</dt>
               <dd class="font-mono">{{ snapshot.numBytes }}</dd>
             </div>
             <div>
-              <dt class="text-text/60">Uso (MB)</dt>
+              <dt class="text-text/70">Uso (MB)</dt>
               <dd class="font-mono">{{ snapshot.usedMemoryMB }}</dd>
             </div>
             <div>
-              <dt class="text-text/60">Pico (MB)</dt>
+              <dt class="text-text/70">Pico (MB)</dt>
               <dd class="font-mono">{{ snapshot.peakMemoryMB }}</dd>
             </div>
           </dl>
@@ -65,7 +65,7 @@ import { BadgeComponent, ButtonComponent, CardComponent } from '@core/ui';
             Resultado: <span class="font-mono">{{ result.sum }}</span> — shape
             [{{ result.snapshot.shape.join(', ') }}], dtype {{ result.snapshot.dtype }}
           </p>
-          <p class="mt-1 text-xs text-text/60">
+          <p class="mt-1 text-xs text-text/70">
             Valores serializados: [{{ result.snapshot.values.join(', ') }}]
           </p>
         }

@@ -62,7 +62,7 @@ const MODES: readonly { id: CodeViewMode; label: string }[] = [
             }
             @case ('operation') {
               <p class="font-mono text-sm">{{ current.operation }}</p>
-              <p class="mt-1 text-xs text-text/60">
+              <p class="mt-1 text-xs text-text/70">
                 {{ current.timestamp | date: 'HH:mm:ss' }}
               </p>
             }
@@ -89,7 +89,7 @@ const MODES: readonly { id: CodeViewMode; label: string }[] = [
                       [class]="
                         'rounded-nl px-2 py-1 text-xs font-medium focus-visible:outline-2 focus-visible:outline-primary ' +
                         (codeMode() === mode.id
-                          ? 'bg-primary text-white'
+                          ? 'bg-primary text-on-primary'
                           : 'border border-border bg-surface text-text hover:bg-bg')
                       "
                       (click)="codeMode.set(mode.id)"

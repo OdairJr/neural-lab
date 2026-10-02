@@ -116,7 +116,7 @@ export function parameterDefault(parameter: ParameterConfig): number | string | 
                       class="text-xs file:mr-2 file:rounded-nl file:border file:border-border file:bg-surface file:px-2 file:py-1 file:text-xs focus-visible:outline-2 focus-visible:outline-primary"
                     />
                     @if (imageInfos()[entry.parameter.name]; as info) {
-                      <span class="text-xs text-text/60">
+                      <span class="text-xs text-text/70">
                         {{ info.name }} · {{ info.width }}×{{ info.height }}
                       </span>
                     }
@@ -144,7 +144,7 @@ export function parameterDefault(parameter: ParameterConfig): number | string | 
                 }
 
                 @if (entry.parameter.description) {
-                  <span class="text-xs text-text/60">{{ entry.parameter.description }}</span>
+                  <span class="text-xs text-text/70">{{ entry.parameter.description }}</span>
                 }
               </label>
             }

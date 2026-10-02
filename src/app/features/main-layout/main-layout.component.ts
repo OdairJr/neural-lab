@@ -19,7 +19,7 @@ interface NavLink {
             @for (link of links; track link.path) {
               <a
                 [routerLink]="link.path"
-                routerLinkActive="bg-primary text-white"
+                routerLinkActive="bg-primary text-on-primary"
                 class="rounded-nl px-3 py-1.5 text-sm font-medium hover:bg-bg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
               >
                 {{ link.label }}
