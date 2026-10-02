@@ -6,6 +6,12 @@ export interface CodeGenerationInput {
   operation: string;
   inputs: TensorSnapshot[];
   output?: TensorSnapshot;
+  /**
+   * TF.js code that actually produced the output. When supplied it takes
+   * precedence over the generated `tf.<operation>(...)` call, because it is the
+   * code that really ran (labs publish it through `ComputationEvent.code`).
+   */
+  code?: string;
 }
 
 const INPUT_NAMES = ['A', 'B', 'C', 'D', 'E'];
@@ -42,6 +48,10 @@ function resultComment(output: TensorSnapshot | undefined): string {
 @Injectable({ providedIn: 'root' })
 export class CodeGeneratorService {
   generate(input: CodeGenerationInput, mode: CodeViewMode = 'annotated'): string {
+    const supplied = input.code?.trim();
+    if (supplied) {
+      return this.fromSuppliedCode(supplied, input, mode);
+    }
     if (mode === 'essential') {
       return this.generateEssential(input);
     }
@@ -49,6 +59,26 @@ export class CodeGeneratorService {
       return this.generateFull(input);
     }
     return this.generateAnnotated(input);
+  }
+
+  /**
+   * Presents the code a lab actually executed. The three detail levels still
+   * differ: `essential` shows the snippet as-is, `annotated` appends the result
+   * summary and `full` adds the TF.js import.
+   */
+  private fromSuppliedCode(
+    code: string,
+    input: CodeGenerationInput,
+    mode: CodeViewMode,
+  ): string {
+    const comment = input.output ? `\n\n${resultComment(input.output)}` : '';
+    if (mode === 'essential') {
+      return code;
+    }
+    if (mode === 'full') {
+      return ["import * as tf from '@tensorflow/tfjs';", '', code + comment].join('\n');
+    }
+    return code + comment;
   }
 
   private generateEssential(input: CodeGenerationInput): string {

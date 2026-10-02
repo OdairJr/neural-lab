@@ -51,7 +51,8 @@ The system SHALL define ExperimentConfig for interactive experimentation stages.
 #### Scenario: Experiment config structure
 - **WHEN** an experiment is configured
 - **THEN** it has: `parameters` (ParameterConfig[]), `visualization` (VisualizationConfig), `constraints` (ConstraintConfig[]), `defaultState` (Record<string, unknown>), `onParameterChange` (event spec for live update)
-- **AND** `ParameterConfig`: `name`, `type` (number|string|boolean|tensor-shape), `label`, `min`/`max`/`options`, `step`, `description`, `tfjsEquivalent` (how param maps to TF.js)
+- **AND** `ParameterConfig`: `name`, `type` (number|string|boolean|tensor-shape|image), `label`, `min`/`max`/`options`, `step`, `description`, `tfjsEquivalent` (how param maps to TF.js)
+- **AND** `image` parameters: rendered as an image file picker (accept `image/*`); value is the decoded image (pixel data + `width`/`height`) supplied at runtime; has no serializable default and is excluded from persisted progress state
 - **AND** `ConstraintConfig`: `expression` (JS expression string evaluated safely), `message` (shown when violated), `severity` (warning|error)
 
 #### Scenario: Experiment runtime

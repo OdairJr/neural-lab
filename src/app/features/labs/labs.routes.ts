@@ -104,6 +104,16 @@ export const LABS_ROUTES: Routes = [
       ),
   },
   {
+    path: '15-imagens-como-tensores',
+    loadChildren: () =>
+      import('./lab-15-images/lab-15-images.routes').then((m) => m.LAB_15_IMAGES_ROUTES),
+  },
+  {
+    path: '16-gerenciamento-de-memoria',
+    loadChildren: () =>
+      import('./lab-16-memory/lab-16-memory.routes').then((m) => m.LAB_16_MEMORY_ROUTES),
+  },
+  {
     path: ':slug',
     providers: [LabRuntimeService],
     loadComponent: () =>

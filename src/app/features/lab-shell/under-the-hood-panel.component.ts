@@ -133,6 +133,7 @@ export class UnderTheHoodPanelComponent implements OnInit {
         operation: current.operation,
         inputs: current.inputs,
         output: current.output,
+        code: current.code,
       },
       this.codeMode(),
     );

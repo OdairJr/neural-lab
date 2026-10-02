@@ -1,10 +1,12 @@
 import { Component, inject, inputBinding, outputBinding } from '@angular/core';
 import { TestBed, type ComponentFixture } from '@angular/core/testing';
 import type { StageConfig } from '@domain/content';
+import { ImageLoaderService } from '@core/images';
 import { ProgressService } from '@domain/progress';
 import { LabRuntimeService } from '@shared/runtime/lab-runtime.service';
 import { ConceptRegistry } from '@shared/concepts/concept-registry.service';
 import { ExperimentRegistry } from '@shared/experiments/experiment-registry';
+import type { ExperimentFn } from '@shared/experiments';
 import { MarkdownStageComponent } from './markdown-stage.component';
 import { ConceptCardStageComponent } from './concept-card-stage.component';
 import { VisualizationStageComponent } from './visualization-stage.component';
@@ -222,6 +224,63 @@ describe('ChallengeStageComponent', () => {
     expect(events).toHaveLength(0);
     expect(fixture.nativeElement.textContent).toContain('Pense na curva em S.');
   });
+
+  it('accepts a string parameter-match target through a text input', async () => {
+    const events: StageCompletionEvent[] = [];
+    const config: StageConfig = {
+      type: 'desafio',
+      title: 'Normalização',
+      component: 'challenge',
+      validation: {
+        type: 'parameter-match',
+        criteria: { target: { normalization: 'signed' } },
+      },
+    };
+    const fixture = await renderChallenge(config, events);
+
+    const input = fixture.nativeElement.querySelector('input') as HTMLInputElement;
+    expect(input.type).toBe('text');
+    input.value = 'signed';
+    input.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
+    submitChallenge(fixture);
+
+    expect(events).toEqual([{ type: 'desafio', index: 3, success: true }]);
+  });
+
+  it('renders the code template and validates a code-output answer', async () => {
+    const events: StageCompletionEvent[] = [];
+    const config: StageConfig = {
+      type: 'desafio',
+      title: 'Conserte o vazamento',
+      component: 'challenge',
+      codeTemplate: [
+        'const antes = tf.memory().numTensors;',
+        'for (let i = 0; i < 100; i++) {',
+        '  tf.tensor(new Float32Array(1000));',
+        '}',
+        'console.log("tensores restantes:", tf.memory().numTensors - antes);',
+      ].join('\n'),
+      validation: {
+        type: 'code-output',
+        prompt: 'Refatore com tf.tidy e informe a saída.',
+        criteria: { expectedOutput: 'tensores restantes: 0' },
+      },
+    };
+    const fixture = await renderChallenge(config, events);
+
+    const codeBlock = fixture.nativeElement.querySelector('app-code-block');
+    expect(codeBlock).toBeTruthy();
+    expect(codeBlock.textContent).toContain('tf.tensor(new Float32Array(1000))');
+
+    const input = fixture.nativeElement.querySelector('input[type="text"]') as HTMLInputElement;
+    input.value = 'tensores restantes: 0';
+    input.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
+    submitChallenge(fixture);
+
+    expect(events).toEqual([{ type: 'desafio', index: 3, success: true }]);
+  });
 });
 
 describe('ExperimentStageComponent', () => {
@@ -289,6 +348,95 @@ describe('ExperimentStageComponent', () => {
       expect(experimentFn).toHaveBeenCalledTimes(2);
       expect(setExperimentState).toHaveBeenCalled();
       expect(events).toHaveLength(1);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it('renders an image picker, loads the file and re-runs the experiment', async () => {
+    vi.useFakeTimers();
+    try {
+      const sample = {
+        name: 'exemplo-gradient',
+        width: 2,
+        height: 2,
+        data: new Uint8ClampedArray(16),
+      };
+      const loaded = {
+        name: 'foto.png',
+        width: 4,
+        height: 4,
+        data: new Uint8ClampedArray(64),
+      };
+      const loadFile = vi.fn(async () => loaded);
+
+      await TestBed.configureTestingModule({
+        imports: [ExperimentStageComponent],
+        providers: [
+          {
+            provide: ImageLoaderService,
+            useValue: { loadFile, sampleImage: () => sample },
+          },
+        ],
+      }).compileComponents();
+
+      const registry = TestBed.inject(ExperimentRegistry);
+      registry.clear();
+      const experimentFn = vi.fn<ExperimentFn>(() => ({
+        visualizationData: undefined,
+      }));
+      registry.register('exp-image', experimentFn);
+
+      const setExperimentState = vi.fn();
+      const runtime = {
+        getExperimentState: vi.fn(() => undefined),
+        setExperimentState,
+        publishComputation: vi.fn(),
+      } as unknown as LabRuntimeService;
+
+      const config: StageConfig = {
+        type: 'experimentacao',
+        title: 'Imagem',
+        component: 'experiment',
+        experimentConfig: {
+          experimentFnId: 'exp-image',
+          parameters: [{ name: 'image', type: 'image', label: 'Imagem' }],
+          visualization: { type: 'image-tensor', accessibility: ACCESSIBILITY },
+        },
+      };
+
+      const fixture = TestBed.createComponent(ExperimentStageComponent, {
+        bindings: [
+          inputBinding('config', () => config),
+          inputBinding('stageIndex', () => 5),
+          inputBinding('runtime', () => runtime),
+        ],
+      });
+      fixture.detectChanges();
+
+      const input = fixture.nativeElement.querySelector(
+        'input[type="file"]',
+      ) as HTMLInputElement;
+      expect(input).toBeTruthy();
+      expect(input.accept).toBe('image/*');
+      expect(experimentFn).toHaveBeenCalledTimes(1);
+      expect(experimentFn.mock.calls[0][0]['image']).toBe(sample);
+
+      const file = new File([new Uint8Array([1])], 'foto.png', { type: 'image/png' });
+      Object.defineProperty(input, 'files', { value: [file] });
+      input.dispatchEvent(new Event('change'));
+
+      await vi.advanceTimersByTimeAsync(0);
+      fixture.detectChanges();
+      await vi.advanceTimersByTimeAsync(150);
+      fixture.detectChanges();
+
+      expect(loadFile).toHaveBeenCalledWith(file);
+      expect(experimentFn).toHaveBeenCalledTimes(2);
+      expect(experimentFn.mock.calls[1][0]['image']).toBe(loaded);
+
+      const saved = setExperimentState.mock.calls.at(-1)?.[1] as Record<string, unknown>;
+      expect(saved['image']).toEqual({ name: 'foto.png', width: 4, height: 4 });
     } finally {
       vi.useRealTimers();
     }

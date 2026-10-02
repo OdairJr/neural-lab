@@ -54,4 +54,38 @@ describe('CodeGeneratorService', () => {
 
     expect(code).toContain('[... 500 valores]');
   });
+
+  describe('with lab-supplied code', () => {
+    const withCode = {
+      ...input,
+      code: 'tf.browser.fromPixels(image).toFloat()',
+    };
+
+    it('prefers the code that actually ran over the generated call', () => {
+      const code = service.generate(withCode, 'annotated');
+
+      expect(code).toContain('tf.browser.fromPixels(image).toFloat()');
+      expect(code).not.toContain('const result = tf.matMul(A, B);');
+      expect(code).toContain('shape [2, 1]');
+    });
+
+    it('shows the supplied code unchanged in essential mode', () => {
+      expect(service.generate(withCode, 'essential')).toBe(
+        'tf.browser.fromPixels(image).toFloat()',
+      );
+    });
+
+    it('adds the TF.js import in full mode', () => {
+      const code = service.generate(withCode, 'full');
+
+      expect(code).toContain("import * as tf from '@tensorflow/tfjs';");
+      expect(code).toContain('tf.browser.fromPixels(image).toFloat()');
+    });
+
+    it('falls back to generation when the supplied code is blank', () => {
+      const code = service.generate({ ...input, code: '   ' }, 'essential');
+
+      expect(code).toContain('const result = tf.matMul(A, B);');
+    });
+  });
 });

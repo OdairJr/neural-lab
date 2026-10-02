@@ -1,5 +1,6 @@
 import {
   laboratoryConfigSchema,
+  parameterConfigSchema,
   validateLaboratoryReferences,
   type LaboratoryConfig,
 } from './schemas';
@@ -97,5 +98,41 @@ describe('content schemas', () => {
 
     expect(result.errors).toHaveLength(0);
     expect(result.warnings).toHaveLength(0);
+  });
+
+  it('accepts an image experiment parameter', () => {
+    const config = makeConfig({
+      stages: [
+        {
+          type: 'experimentacao',
+          title: 'Imagem',
+          component: 'experiment',
+          experimentConfig: {
+            experimentFnId: 'lab-15-images',
+            parameters: [{ name: 'image', type: 'image', label: 'Imagem de entrada' }],
+            visualization: {
+              type: 'image-tensor',
+              accessibility: {
+                ariaLabel: 'Imagem',
+                dataTableAlternative: true,
+                colorBlindSafe: true,
+              },
+            },
+          },
+        },
+      ],
+    });
+
+    expect(laboratoryConfigSchema.safeParse(config).success).toBe(true);
+  });
+
+  it('rejects an unknown parameter type', () => {
+    const result = parameterConfigSchema.safeParse({
+      name: 'audio',
+      type: 'audio',
+      label: 'Áudio',
+    });
+
+    expect(result.success).toBe(false);
   });
 });

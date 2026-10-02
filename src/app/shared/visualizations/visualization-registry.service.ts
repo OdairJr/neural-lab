@@ -1,6 +1,7 @@
 import { Injectable, type Type } from '@angular/core';
 import type { VisualizationType } from '@domain/content';
 import { ActivationCurveComponent } from './activation-curve/activation-curve.component';
+import { ImageTensorComponent } from './image-tensor/image-tensor.component';
 import { LineChartComponent } from './line-chart/line-chart.component';
 import { MatrixHeatmapComponent } from './matrix-heatmap/matrix-heatmap.component';
 import { MemoryTimelineComponent } from './memory-timeline/memory-timeline.component';
@@ -26,6 +27,7 @@ export class VisualizationRegistry {
     this.register('activation-curve', ActivationCurveComponent);
     this.register('memory-timeline', MemoryTimelineComponent);
     this.register('network-graph', NetworkGraphComponent);
+    this.register('image-tensor', ImageTensorComponent);
   }
 
   register(type: VisualizationType, component: Type<unknown>): void {

@@ -185,20 +185,20 @@
 ## 6. Phase 5 — Images & Memory (Weeks 19-22)
 
 ### 6.1 Lab 15: Images as Tensors
-- [ ] 6.1.1 Create `lab-15-images` lazy feature — verify route works
-- [ ] 6.1.2 Implement image → pixels → tensor, shape, RGB, grayscale, resize, normalize — verify tensor shapes correct
-- [ ] 6.1.3 Experiment: upload image → see tensor (3×H×W), grayscale (1×H×W), resize (224×224), normalize [0,1] — verify upload works
-- [ ] 6.1.4 Visualization: image-tensor (original + tensor slices side-by-side), channel toggle — verify visualization renders
-- [ ] 6.1.5 "Under the hood": shows `tf.browser.fromPixels`, `tf.image.resizeBilinear`, div/255 — verify panel shows ops
-- [ ] 6.1.6 Challenge: preprocess image for MobileNet input (224×224×3, [-1,1]) — verify challenge validates
+- [x] 6.1.1 Create `lab-15-images` lazy feature — verify route works
+- [x] 6.1.2 Implement image → pixels → tensor, shape, RGB, grayscale, resize, normalize — verify tensor shapes correct
+- [x] 6.1.3 Experiment: upload image → see tensor (3×H×W), grayscale (1×H×W), resize (224×224), normalize [0,1] — verify upload works
+- [x] 6.1.4 Visualization: image-tensor (original + tensor slices side-by-side), channel toggle — verify visualization renders
+- [x] 6.1.5 "Under the hood": shows `tf.browser.fromPixels`, `tf.image.resizeBilinear`, div/255 — verify panel shows ops
+- [x] 6.1.6 Challenge: preprocess image for MobileNet input (224×224×3, [-1,1]) — verify challenge validates
 
 ### 6.2 Lab 16: Memory Management
-- [ ] 6.2.1 Create `lab-16-memory` lazy feature — verify route works
-- [ ] 6.2.2 Implement tf.memory(), tf.dispose(), tf.tidy(), leaks, best practices — verify concepts registered
-- [ ] 6.2.3 Experiment: leak demo (create tensors in loop without dispose) → memory rises → fix with tidy — verify leak detected, fix works
-- [ ] 6.2.4 Visualization: memory-timeline (live), leak vs fixed comparison — verify timeline shows leak
-- [ ] 6.2.5 "Under the hood": shows memory before/after each operation — verify panel shows memory
-- [ ] 6.2.6 Challenge: refactor leaky code to use tidy (code-output validation) — verify challenge validates
+- [x] 6.2.1 Create `lab-16-memory` lazy feature — verify route works
+- [x] 6.2.2 Implement tf.memory(), tf.dispose(), tf.tidy(), leaks, best practices — verify concepts registered
+- [x] 6.2.3 Experiment: leak demo (create tensors in loop without dispose) → memory rises → fix with tidy — verify leak detected, fix works
+- [x] 6.2.4 Visualization: memory-timeline (live), leak vs fixed comparison — verify timeline shows leak
+- [x] 6.2.5 "Under the hood": shows memory before/after each operation — verify panel shows memory
+- [x] 6.2.6 Challenge: refactor leaky code to use tidy (code-output validation) — verify challenge validates
 
 ## 7. Phase 6 — Polish & Integration (Weeks 23-26)
 

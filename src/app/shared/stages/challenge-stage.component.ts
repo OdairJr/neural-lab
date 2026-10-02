@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, input, output, signal } from '@angular/core';
 import type { StageConfig } from '@domain/content';
+import { CodeBlockComponent } from '@core/ui';
 import type { LabRuntimeService } from '../runtime/lab-runtime.service';
 import { StageLayoutComponent } from './stage-layout.component';
 import { StageCompletionEvent } from './stage-contract';
@@ -13,7 +14,7 @@ import { validateChallenge, type ChallengeInput, type ChallengeResult } from '..
 @Component({
   selector: 'app-challenge-stage',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [StageLayoutComponent],
+  imports: [CodeBlockComponent, StageLayoutComponent],
   template: `
     <app-stage-layout
       [title]="config().title"
@@ -26,6 +27,10 @@ import { validateChallenge, type ChallengeInput, type ChallengeResult } from '..
 
           @if (current.prompt) {
             <p class="whitespace-pre-line text-sm text-text/90">{{ current.prompt }}</p>
+          }
+
+          @if (config().codeTemplate; as codeTemplate) {
+            <app-code-block [code]="codeTemplate" />
           }
 
           @switch (current.type) {
@@ -53,7 +58,7 @@ import { validateChallenge, type ChallengeInput, type ChallengeResult } from '..
                   <label class="flex flex-col gap-1 text-sm">
                     <span class="text-xs font-medium text-text/70">{{ entry[0] }}</span>
                     <input
-                      type="number"
+                      [type]="isNumberTarget(entry[1]) ? 'number' : 'text'"
                       [value]="parameterValues()[entry[0]] ?? ''"
                       (input)="onParameterInput(entry[0], $event)"
                       class="h-10 rounded-nl border border-border bg-surface px-3 text-sm focus-visible:outline-2 focus-visible:outline-primary"
@@ -182,6 +187,11 @@ export class ChallengeStageComponent {
 
   protected isSelected(optionId: string): boolean {
     return this.selectedOptionIds().includes(optionId);
+  }
+
+  /** Numeric targets get a numeric input; string enum targets get a text input. */
+  protected isNumberTarget(expected: unknown): boolean {
+    return typeof expected === 'number';
   }
 
   protected onOptionChange(optionId: string, event: Event): void {

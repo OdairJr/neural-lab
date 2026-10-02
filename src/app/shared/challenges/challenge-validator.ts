@@ -15,6 +15,11 @@ export interface ChallengeResult {
 
 const DEFAULT_TOLERANCE = 1e-3;
 
+/** Trims string values so `" signed "` matches `"signed"`; other types pass through. */
+function trimValue(value: unknown): unknown {
+  return typeof value === 'string' ? value.trim() : value;
+}
+
 function toNumber(value: unknown): number | null {
   if (typeof value === 'number') {
     return value;
@@ -40,12 +45,16 @@ export function validateChallenge(
         return { valid: false, message: 'Entrada incompatível com o desafio.' };
       }
       for (const [key, expected] of Object.entries(validation.criteria.target)) {
+        const actual = input.params[key];
         const expectedNumber = toNumber(expected);
-        const actualNumber = toNumber(input.params[key]);
-        const matches =
-          expectedNumber !== null && actualNumber !== null
-            ? Math.abs(expectedNumber - actualNumber) < DEFAULT_TOLERANCE
-            : input.params[key] === expected;
+        const actualNumber = toNumber(actual);
+        let matches: boolean;
+        if (expectedNumber !== null && actualNumber !== null) {
+          matches = Math.abs(expectedNumber - actualNumber) < DEFAULT_TOLERANCE;
+        } else {
+          // String targets ignore surrounding whitespace on either side.
+          matches = trimValue(actual) === trimValue(expected);
+        }
         if (!matches) {
           return {
             valid: false,

@@ -508,6 +508,106 @@ const NEURAL_CONCEPTS: readonly ConceptSeed[] = [
   },
 ];
 
+/** Concepts introduced by the Phase 5 laboratories (Labs 15-16). */
+const IMAGE_CONCEPTS: readonly ConceptSeed[] = [
+  {
+    id: 'imagem',
+    title: 'Imagem',
+    shortDefinition: 'Grade de pixels que vira um tensor [altura, largura, canais].',
+    fullDefinition:
+      'Uma imagem digital é uma grade de pixels. Cada pixel guarda a intensidade de um ou mais canais (vermelho, verde e azul em uma foto colorida), então a imagem inteira é representada como um tensor de rank 3: [altura, largura, canais]. É essa a forma que uma rede convolucional recebe como entrada.',
+    mathematicalNotation: 'I \\in \\mathbb{R}^{H \\times W \\times C}',
+    visualAnalogy: 'Um mosaico de azulejos em que cada azulejo guarda três números: quanto de vermelho, verde e azul.',
+    tfjsApi: ['tf.browser.fromPixels', 'tf.image.resizeBilinear'],
+    relatedConcepts: ['tensor', 'rgb', 'grayscale', 'normalizacao'],
+    introducedInLab: 'lab-15-images',
+  },
+  {
+    id: 'rgb',
+    title: 'RGB',
+    shortDefinition: 'Três canais (vermelho, verde, azul) que descrevem a cor de cada pixel.',
+    fullDefinition:
+      'O modelo RGB descreve uma cor por três intensidades, normalmente de 0 a 255. Em uma imagem colorida o tensor tem shape [altura, largura, 3], com as três intensidades intercaladas por pixel. Praticamente todo modelo pré-treinado de visão espera a entrada nesse formato de canais por último (channels-last).',
+    mathematicalNotation: '(R, G, B) \\in [0, 255]^3',
+    visualAnalogy: 'Misturar três tintas — vermelha, verde e azul — para produzir qualquer cor.',
+    tfjsApi: ['tf.browser.fromPixels', 'tf.split'],
+    relatedConcepts: ['imagem', 'grayscale', 'tensor'],
+    introducedInLab: 'lab-15-images',
+  },
+  {
+    id: 'grayscale',
+    title: 'Grayscale',
+    shortDefinition: 'Imagem de um único canal obtida pela luminância dos canais RGB.',
+    fullDefinition:
+      'Converter uma imagem para escala de cinza substitui as três intensidades por um único valor de brilho. Usamos a luminância 0,299·R + 0,587·G + 0,114·B, que pondera os canais conforme a sensibilidade do olho humano (os coeficientes do padrão BT.601). O tensor passa a ter shape [altura, largura, 1], reduzindo o custo de cálculo.',
+    mathematicalNotation: 'Y = 0{,}299R + 0{,}587G + 0{,}114B',
+    visualAnalogy: 'Tirar uma foto em preto e branco: as cores viram tons de cinza.',
+    tfjsApi: ['tf.sum', 'tf.mul'],
+    relatedConcepts: ['imagem', 'rgb', 'normalizacao'],
+    introducedInLab: 'lab-15-images',
+  },
+  {
+    id: 'normalizacao',
+    title: 'Normalização',
+    shortDefinition: 'Reescala os valores dos pixels para uma faixa pequena e centrada.',
+    fullDefinition:
+      'Redes treinam melhor quando as entradas têm escala controlada. A normalização unitária divide os pixels por 255 e produz o intervalo [0, 1]; a normalização com sinal aplica (x / 255 − 0,5)·2 e produz [−1, 1], que é a entrada esperada pela MobileNet. Sem normalizar, gradientes ficam instáveis e o treino converge devagar.',
+    mathematicalNotation: 'x_{unit} = x / 255, \\quad x_{signed} = (x / 255 - 0{,}5) \\cdot 2',
+    visualAnalogy: 'Converter uma medida em metros para centímetros: mesma informação, escala adequada.',
+    tfjsApi: ['tf.div', 'tf.sub', 'tf.mul'],
+    relatedConcepts: ['imagem', 'rgb', 'grayscale', 'learning-rate'],
+    introducedInLab: 'lab-15-images',
+  },
+];
+
+/** Concepts introduced by the Phase 5 memory laboratory (Lab 16). */
+const MEMORY_CONCEPTS: readonly ConceptSeed[] = [
+  {
+    id: 'memoria',
+    title: 'Memória (TF.js)',
+    shortDefinition: 'Recurso ocupado pelos tensores vivos, medido por tf.memory().',
+    fullDefinition:
+      'Cada tensor criado reserva memória na GPU (WebGL/WebGPU) ou na CPU. tf.memory() informa quantos tensores estão vivos (numTensors), quantos bytes estão reservados (numBytes) e se a contagem é confiável (unreliable). Monitorar essa API é a forma prática de detectar vazamentos durante uma sessão.',
+    visualAnalogy: 'O medidor de uma pia: quantos pratos ainda estão sujos.',
+    tfjsApi: ['tf.memory', 'tf.disposeVariables'],
+    relatedConcepts: ['tensor', 'dispose', 'tidy', 'vazamento'],
+    introducedInLab: 'lab-16-memory',
+  },
+  {
+    id: 'dispose',
+    title: 'dispose',
+    shortDefinition: 'Libera manualmente a memória ocupada por um tensor.',
+    fullDefinition:
+      'tensor.dispose() devolve imediatamente a memória daquele tensor. Também há tf.dispose(container) para arrays/objetos de tensores e tf.disposeVariables() para variáveis. O descarte explícito é necessário para tensores de vida longa que ficam fora de um tf.tidy.',
+    visualAnalogy: 'Lavar um prato específico assim que termina de usá-lo.',
+    tfjsApi: ['tensor.dispose', 'tf.dispose', 'tf.disposeVariables'],
+    relatedConcepts: ['memoria', 'tidy', 'vazamento'],
+    introducedInLab: 'lab-16-memory',
+  },
+  {
+    id: 'tidy',
+    title: 'tidy',
+    shortDefinition: 'Executa um bloco e libera automaticamente todos os tensores não retornados.',
+    fullDefinition:
+      'tf.tidy(fn) executa fn e, ao final, descarta todos os tensores criados dentro do bloco, exceto o valor retornado (que pode ser um tensor, um array ou um objeto de tensores). É a forma mais segura de evitar vazamentos em cálculos intermediários, pois o descarte deixa de depender de disciplina manual.',
+    visualAnalogy: 'Lavar toda a louça usada no preparo, deixando de fora só o prato que vai à mesa.',
+    tfjsApi: ['tf.tidy'],
+    relatedConcepts: ['memoria', 'dispose', 'vazamento'],
+    introducedInLab: 'lab-16-memory',
+  },
+  {
+    id: 'vazamento',
+    title: 'Vazamento de memória',
+    shortDefinition: 'Tensores criados e nunca descartados, acumulando memória.',
+    fullDefinition:
+      'Um vazamento acontece quando tensores deixam de ser usados mas continuam vivos — por exemplo, criados em um loop sem dispose nem tidy. A memória cresce a cada iteração até degradar o desempenho ou esgotar o backend. Não é um erro lançado pelo JavaScript: só o monitoramento de tf.memory() revela o problema.',
+    visualAnalogy: 'Empilhar pratos na pia sem lavar nenhum até ela transbordar.',
+    tfjsApi: ['tf.memory', 'tf.tidy', 'tensor.dispose'],
+    relatedConcepts: ['memoria', 'dispose', 'tidy'],
+    introducedInLab: 'lab-16-memory',
+  },
+];
+
 /** Compact `[id, title]` fallback for concepts authored in later phases. */
 const CONCEPT_SEEDS: readonly [string, string][] = [
   ['dataset', 'Dataset'],
@@ -523,14 +623,6 @@ const CONCEPT_SEEDS: readonly [string, string][] = [
   ['gradiente', 'Gradiente'],
   ['convergencia', 'Convergência'],
   ['minimo-local', 'Mínimo local'],
-  ['imagem', 'Imagem'],
-  ['rgb', 'RGB'],
-  ['grayscale', 'Grayscale'],
-  ['normalizacao', 'Normalização'],
-  ['memoria', 'Memória'],
-  ['dispose', 'dispose'],
-  ['tidy', 'tidy'],
-  ['vazamento', 'Vazamento de memória'],
 ];
 
 function toConcept(seed: ConceptSeed): ConceptSchema {
@@ -552,6 +644,8 @@ function toConcept(seed: ConceptSeed): ConceptSchema {
 export const CONCEPTS: readonly ConceptSchema[] = [
   ...TENSOR_CONCEPTS.map(toConcept),
   ...NEURAL_CONCEPTS.map(toConcept),
+  ...IMAGE_CONCEPTS.map(toConcept),
+  ...MEMORY_CONCEPTS.map(toConcept),
   ...CONCEPT_SEEDS.map(([id, title]) =>
     toConcept({ id, title, shortDefinition: title, fullDefinition: title }),
   ),
