@@ -32,7 +32,7 @@ describe('ComponentRegistry', () => {
 });
 
 describe('VisualizationRegistry', () => {
-  it('resolves the Phase 1 core visualization set', () => {
+  it('resolves all V1 registered visualization types', () => {
     const registry = TestBed.inject(VisualizationRegistry);
 
     for (const type of [
@@ -42,6 +42,7 @@ describe('VisualizationRegistry', () => {
       'scatter-plot',
       'activation-curve',
       'memory-timeline',
+      'network-graph',
       'image-tensor',
     ] as const) {
       expect(registry.has(type)).toBe(true);
@@ -49,9 +50,12 @@ describe('VisualizationRegistry', () => {
     }
   });
 
-  it('returns undefined for an unregistered visualization type', () => {
+  it('does not register the reserved V1 visualization types', () => {
     const registry = TestBed.inject(VisualizationRegistry);
 
-    expect(registry.resolve('tensor-3d')).toBeUndefined();
+    for (const type of ['tensor-3d', 'decision-boundary'] as const) {
+      expect(registry.has(type)).toBe(false);
+      expect(registry.resolve(type)).toBeUndefined();
+    }
   });
 });

@@ -58,13 +58,13 @@
 - [x] 2.2.7 Implement stage completion tracking + `stageComplete` emission — verify stage marks complete, progress updates
 
 ### 2.3 Visualization Engine (Core Set)
-- [ ] 2.3.1 Create `TensorGridComponent`: rank 1-3, slice selector, value tooltip, responsive — verify visual regression test passes
+- [x] 2.3.1 Create `TensorGridComponent`: rank 1-3, slice selector, value tooltip, responsive — verify visual regression test passes
 - [x] 2.3.2 Create `MatrixHeatmapComponent`: color scale, labels, hover values — verify renders matrix correctly
 - [x] 2.3.3 Create `LineChartComponent` (Chart.js): multi-series, epoch animation, tooltip — verify chart updates on data change
 - [x] 2.3.4 Create `ScatterPlotComponent`: classes, decision boundary overlay, hover details — verify decision boundary renders
 - [x] 2.3.5 Create `ActivationCurveComponent`: 4 functions, adjustable x-range, derivative toggle — verify curves match mathematical functions
 - [x] 2.3.6 Create `MemoryTimelineComponent`: snapshots, markers, hover stats — verify timeline shows memory events
-- [ ] 2.3.7 Ensure all visualizations: data table alternative, color-blind patterns, reduced motion — verify axe-core passes, reduced motion works
+- [x] 2.3.7 Ensure all visualizations: data table alternative, color-blind patterns, reduced motion — verify axe-core passes, reduced motion works
 
 ### 2.4 Content Schema & Validation
 - [x] 2.4.1 Define Zod schemas in `domain/content`: `LaboratoryConfig`, `StageConfig`, `ExperimentConfig`, `ChallengeValidation`, `VisualizationConfig`, `Concept` — verify TypeScript types generated
@@ -178,7 +178,7 @@
 - [x] 5.4.1 Create `lab-14-classification` lazy feature — verify route works
 - [x] 5.4.2 Implement binary/multi-class, decision boundary, XOR — verify XOR fails with 0 hidden layers
 - [x] 5.4.3 Experiment: toggle XOR dataset → see linear fail → add hidden layer → see success — verify XOR solved
-- [x] 5.4.4 Visualization: decision-boundary (evolution slider), confusion matrix, class distribution — verify all render
+- [x] 5.4.4 Visualization: scatter-plot decision-boundary overlay driven by the numeric `epochs` parameter (boundary evolves as each training epoch streams), confusion matrix via `matrix-heatmap`, class distribution — verify all render
 - [x] 5.4.5 Multi-class: softmax output, one-hot labels — verify softmax works
 - [x] 5.4.6 Challenge: design network that solves XOR (min neurons/layers) — verify challenge validates
 

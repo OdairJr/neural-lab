@@ -81,11 +81,11 @@ The system SHALL render all visualization types correctly.
 - **AND** data table alternative for screen readers
 
 #### Scenario: Decision boundary
-- **WHEN** `decision-boundary` renders during training
-- **THEN** shows: mesh grid colored by prediction, data points overlaid
-- **AND** animates smoothly between epochs (requestAnimationFrame)
-- **AND** user can pause/scrub epoch slider
-- **AND** color-blind safe palette (viridis)
+- **WHEN** a lab displays a decision boundary during training
+- **THEN** it renders as an optional overlay on the `scatter-plot` visualization: predicted-class mesh cells color-coded by prediction with the labelled data points overlaid
+- **AND** the overlay updates as each training epoch streams
+- **AND** the `scatter-plot` provides a data table alternative for color-independent access
+- **AND** a standalone `decision-boundary` visualization type with requestAnimationFrame animation and a pause/scrub epoch control is reserved for a later phase, not delivered in V1
 
 #### Scenario: Memory timeline
 - **WHEN** `memory-timeline` renders

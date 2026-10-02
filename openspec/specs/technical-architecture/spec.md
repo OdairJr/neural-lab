@@ -133,17 +133,18 @@ The system SHALL provide a pluggable visualization system.
 
 #### Scenario: Visualization Registry
 - **WHEN** app starts
-- **THEN** `VisualizationRegistry` (Map<string, VisualizationComponent>) registers:
+- **THEN** `VisualizationRegistry` (Map<VisualizationType, Type<unknown>>) SHALL register exactly these V1 types:
   - `tensor-grid` → `TensorGridComponent`
-  - `tensor-3d` → `Tensor3dComponent` (Three.js/WebGL)
   - `matrix-heatmap` → `MatrixHeatmapComponent`
   - `line-chart` → `LineChartComponent` (Chart.js)
   - `scatter-plot` → `ScatterPlotComponent` (Chart.js/Canvas)
-  - `decision-boundary` → `DecisionBoundaryComponent` (Canvas)
   - `activation-curve` → `ActivationCurveComponent` (Canvas)
   - `memory-timeline` → `MemoryTimelineComponent` (Chart.js)
-  - `image-tensor` → `ImageTensorComponent` (Canvas)
   - `network-graph` → `NetworkGraphComponent` (D3/Canvas)
+  - `image-tensor` → `ImageTensorComponent` (Canvas)
+- **AND** `tensor-3d` and `decision-boundary` SHALL remain reserved `VISUALIZATION_TYPES` values — typed by `Tensor3dData` and `DecisionBoundaryData` respectively — that are NOT registered as standalone components in V1
+- **AND** labs MAY register additional lab-specific components at runtime via `VisualizationRegistry.register(type, component)`
+- **AND** decision-boundary shading SHALL be provided as an optional overlay on `scatter-plot` via the `DecisionBoundary` structure (`{ mesh, extent, classes }`), not as a standalone registered component
 
 #### Scenario: Visualization Contract
 - **WHEN** a visualization component is created
