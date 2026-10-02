@@ -75,6 +75,7 @@ function toLabProgress(raw: Record<string, unknown>): LabProgress {
     completedStages: toStringArray(raw['completedStages']),
     currentStageIndex: typeof raw['currentStageIndex'] === 'number' ? raw['currentStageIndex'] : 0,
     timeSpentMs: typeof raw['timeSpentMs'] === 'number' ? raw['timeSpentMs'] : 0,
+    lastVisitedAt: typeof raw['lastVisitedAt'] === 'string' ? raw['lastVisitedAt'] : null,
     challengeAttempts: toRecordArray(raw['challengeAttempts']).map(toChallengeAttempt),
     experimentStates: isRecord(raw['experimentStates']) ? { ...raw['experimentStates'] } : {},
   };
@@ -103,6 +104,7 @@ function toSettings(raw: unknown): UserSettings {
     reducedMotion: raw['reducedMotion'] === true,
     showUnderTheHood: raw['showUnderTheHood'] === true,
     language: 'pt-BR',
+    includeAnalyticsInExport: raw['includeAnalyticsInExport'] === true,
   };
 }
 

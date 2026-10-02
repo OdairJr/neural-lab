@@ -1,5 +1,8 @@
 /** Current persisted progress schema version. */
-export const PROGRESS_SCHEMA_VERSION = 1;
+export const PROGRESS_SCHEMA_VERSION = 2;
+
+/** Maximum number of analytics events kept before the oldest are dropped. */
+export const ANALYTICS_EVENT_LIMIT = 1000;
 
 export type LabStatus = 'not-started' | 'in-progress' | 'completed';
 
@@ -21,6 +24,8 @@ export interface LabProgress {
   completedStages: string[];
   currentStageIndex: number;
   timeSpentMs: number;
+  /** ISO timestamp of the last time the lab was opened or interacted with. */
+  lastVisitedAt: string | null;
   challengeAttempts: ChallengeAttempt[];
   experimentStates: Record<string, unknown>;
 }
@@ -30,6 +35,8 @@ export interface UserSettings {
   reducedMotion: boolean;
   showUnderTheHood: boolean;
   language: 'pt-BR';
+  /** Whether `exportToJson` includes the local analytics events (opt-in). */
+  includeAnalyticsInExport: boolean;
 }
 
 export type AnalyticsEventType =
@@ -64,6 +71,7 @@ export function createLabProgress(labId: string): LabProgress {
     completedStages: [],
     currentStageIndex: 0,
     timeSpentMs: 0,
+    lastVisitedAt: null,
     challengeAttempts: [],
     experimentStates: {},
   };
@@ -75,6 +83,7 @@ export function createDefaultSettings(): UserSettings {
     reducedMotion: false,
     showUnderTheHood: false,
     language: 'pt-BR',
+    includeAnalyticsInExport: false,
   };
 }
 

@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, Component, computed, input, output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, output, signal } from '@angular/core';
 import type { StageConfig } from '@domain/content';
+import { ProgressService } from '@domain/progress';
 import { CodeBlockComponent } from '@core/ui';
 import type { LabRuntimeService } from '../runtime/lab-runtime.service';
 import { StageLayoutComponent } from './stage-layout.component';
@@ -153,6 +154,8 @@ export class ChallengeStageComponent {
   readonly runtime = input.required<LabRuntimeService>();
   readonly stageComplete = output<StageCompletionEvent>();
 
+  private readonly progress = inject(ProgressService);
+
   protected readonly attempts = signal(0);
   protected readonly result = signal<ChallengeResult | null>(null);
   protected readonly parameterValues = signal<Record<string, unknown>>({});
@@ -238,12 +241,34 @@ export class ChallengeStageComponent {
     this.attempts.update((count) => count + 1);
     this.result.set(outcome);
 
+    const labId = this.runtime().labId;
+    const stageIndex = this.stageIndex();
+    const hintUsed = this.hint() !== null;
+
+    if (labId) {
+      this.progress.updateLab(labId, (lab) => ({
+        ...lab,
+        challengeAttempts: [
+          ...lab.challengeAttempts,
+          {
+            stageIndex,
+            timestamp: new Date().toISOString(),
+            success: outcome.valid,
+            hintUsed,
+          },
+        ],
+      }));
+    }
+
     if (outcome.valid) {
+      this.progress.recordAnalytics('challenge-passed', { labId, stageIndex });
       this.stageComplete.emit({
         type: this.config().type,
-        index: this.stageIndex(),
+        index: stageIndex,
         success: true,
       });
+    } else {
+      this.progress.recordAnalytics('challenge-failed', { labId, stageIndex });
     }
   }
 

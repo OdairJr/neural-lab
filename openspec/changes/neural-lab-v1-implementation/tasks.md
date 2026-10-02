@@ -203,16 +203,16 @@
 ## 7. Phase 6 — Polish & Integration (Weeks 23-26)
 
 ### 7.1 Glossary & Concept Integration
-- [ ] 7.1.1 Create `features/glossary`: page, search, detail view, inline modal — verify glossary page works
-- [ ] 7.1.2 Populate concept registry from all labs (40+ concepts) — verify all concepts linked
-- [ ] 7.1.3 Implement inline glossary links in lab content (markdown → linkify) — verify links work in labs
-- [ ] 7.1.4 Add cross-references: "Ver também", "Pré-requisito", "Reforçado em" — verify cross-refs appear
+- [x] 7.1.1 Create `features/glossary`: page, search, detail view, inline modal — verify glossary page works
+- [x] 7.1.2 Populate concept registry from all labs (40+ concepts) — verify all concepts linked
+- [x] 7.1.3 Implement inline glossary links in lab content (markdown → linkify) — verify links work in labs
+- [x] 7.1.4 Add cross-references: "Ver também", "Pré-requisito", "Reforçado em" — verify cross-refs appear
 
 ### 7.2 Progress Dashboard & Analytics
-- [ ] 7.2.1 Create `ProgressComponent`: overall %, radar chart (12 concepts), per-lab detail — verify dashboard renders
-- [ ] 7.2.2 Implement analytics events: lab-started, stage-completed, challenge-passed, etc. — verify events recorded
-- [ ] 7.2.3 Local analytics view: "Seu aprendizado" (time, streak, struggle points) — verify view shows data
-- [ ] 7.2.4 Export includes analytics (opt-in) — verify export JSON contains analytics
+- [x] 7.2.1 Create `ProgressComponent`: overall %, radar chart (12 concepts), per-lab detail — verify dashboard renders
+- [x] 7.2.2 Implement analytics events: lab-started, stage-completed, challenge-passed, etc. — verify events recorded
+- [x] 7.2.3 Local analytics view: "Seu aprendizado" (time, streak, struggle points) — verify view shows data
+- [x] 7.2.4 Export includes analytics (opt-in) — verify export JSON contains analytics
 
 ### 7.3 Accessibility & Performance Audit
 - [ ] 7.3.1 Run full axe-core audit — verify 0 violations AA

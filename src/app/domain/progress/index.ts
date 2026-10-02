@@ -1,4 +1,5 @@
 export {
+  ANALYTICS_EVENT_LIMIT,
   createDefaultProgress,
   createDefaultSettings,
   createLabProgress,
