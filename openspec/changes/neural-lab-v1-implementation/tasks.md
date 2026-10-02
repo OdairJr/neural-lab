@@ -250,18 +250,18 @@
 ## 9. Verification & Acceptance
 
 ### 9.1 Playwright E2E Test Suite Setup
-- [ ] 9.1.1 Create Playwright test project structure: `e2e/` folder with page objects for Journey, Lab, Catalog, Glossary, Progress, Settings — verify page objects compile
-- [ ] 9.1.2 Implement core E2E tests: complete Lab 1 (tensors), complete Lab 9 (regression), export/import progress, dark/light theme toggle, reduced motion, keyboard navigation, accessibility audit (axe-playwright) — verify all tests pass
-- [ ] 9.1.3 Implement lab-specific E2E tests for each of 16 labs: stage navigation, experiment interaction, challenge validation, "Under the Hood" panel, progress persistence — verify all 16 lab test suites pass
-- [ ] 9.1.4 Configure Playwright to generate videos for all test runs: `video: 'on'` — verify videos saved to `test-results/videos/`
-- [ ] 9.1.5 Configure Playwright to capture screenshots on failure and at key validation points: `screenshot: 'only-on-failure'` + manual `page.screenshot()` calls — verify screenshots saved to `test-results/screenshots/`
-- [ ] 9.1.6 Configure CI to upload Playwright artifacts (videos, screenshots, traces) — verify GitHub Actions uploads artifacts
-- [ ] 9.1.7 Establish gate: no task considered complete until corresponding Playwright tests pass — verify CI fails on test failure
+- [x] 9.1.1 Create Playwright test project structure: `e2e/` folder with page objects for Journey, Lab, Catalog, Glossary, Progress, Settings — verify page objects compile
+- [x] 9.1.2 Implement core E2E tests: complete Lab 1 (tensors), complete Lab 9 (regression), export/import progress, dark/light theme toggle, reduced motion, keyboard navigation, accessibility audit (axe-playwright) — verify all tests pass
+- [x] 9.1.3 Implement lab-specific E2E tests for each of 16 labs: stage navigation, experiment interaction, challenge validation, "Under the Hood" panel, progress persistence — verify all 16 lab test suites pass
+- [x] 9.1.4 Configure Playwright to generate videos for all test runs: `video: 'on'` — verify videos saved to `test-results/videos/`
+- [x] 9.1.5 Configure Playwright to capture screenshots on failure and at key validation points: `screenshot: 'only-on-failure'` + manual `page.screenshot()` calls — verify screenshots saved to `test-results/screenshots/`
+- [x] 9.1.6 Configure CI to upload Playwright artifacts (videos, screenshots, traces) — verify GitHub Actions uploads artifacts
+- [x] 9.1.7 Establish gate: no task considered complete until corresponding Playwright tests pass — verify CI fails on test failure
 
 ### 9.2 End-to-End Validation
-- [ ] 9.2.1 Complete full journey: Labs 1-16 via Playwright — verify all labs completable, videos generated
-- [ ] 9.2.2 Verify progress export/import roundtrip via Playwright — verify data integrity, screenshots captured
-- [ ] 9.2.3 Verify dark/light theme, reduced motion, keyboard-only navigation via Playwright — verify all work, videos generated
+- [x] 9.2.1 Complete full journey: Labs 1-16 via Playwright — verify all labs completable, videos generated
+- [x] 9.2.2 Verify progress export/import roundtrip via Playwright — verify data integrity, screenshots captured
+- [x] 9.2.3 Verify dark/light theme, reduced motion, keyboard-only navigation via Playwright — verify all work, videos generated
 - [ ] 9.2.4 Verify production build deploys to GitHub Pages via Playwright — verify live site works, screenshots captured
 - [ ] 9.2.5 Product owner acceptance with Playwright artifact review — verify sign-off recorded with video/screenshot evidence
 

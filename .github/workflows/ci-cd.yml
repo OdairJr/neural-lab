@@ -103,6 +103,15 @@ jobs:
           path: playwright-report/
           retention-days: 14
 
+      # Task 9.1.6: the videos, screenshots and traces produced by the run.
+      - name: Upload Playwright artifacts (videos, screenshots, traces)
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-artifacts
+          path: test-results/
+          retention-days: 14
+
       # Rebuild with the repository base href for GitHub Pages project sites.
       - name: Build production application (GitHub Pages)
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'

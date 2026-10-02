@@ -14,6 +14,10 @@ export default defineConfig({
     baseURL: 'http://127.0.0.1:4173',
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
+    // Task 9.1.4: record a video for every run so UI review is possible without
+    // running the project. Playwright writes them under the output directory
+    // (`test-results/<test>/video.webm`).
+    video: 'on',
   },
   projects: [
     {
