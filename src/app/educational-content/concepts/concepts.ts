@@ -3,12 +3,11 @@ import type { Concept as ConceptSchema } from '@domain/content';
 /**
  * V1 concept glossary.
  *
- * The concepts introduced by the Phase 2 laboratories (Labs 1-7, Tensors &
- * Operations) have full definitions so the concept cards and the glossary can
- * render them. The remaining concepts are still compact seeds; richer
- * definitions land with their laboratories in later phases. This file is the
- * single source of truth for concept ids so the build-time validator can check
- * every lab reference.
+ * Every V1 concept has a full definition so the concept cards and the glossary
+ * can render them: definitions are grouped by the phase that introduces them
+ * (tensors & operations, neural networks, images & memory, and ML &
+ * regression). This file is the single source of truth for concept ids so the
+ * build-time validator can check every lab reference.
  *
  * The file is intentionally self-contained (type-only domain import) so the
  * Node content validator can import it directly with a `.ts` specifier.
@@ -508,29 +507,265 @@ const NEURAL_CONCEPTS: readonly ConceptSeed[] = [
   },
 ];
 
-/** Compact `[id, title]` fallback for concepts authored in later phases. */
-const CONCEPT_SEEDS: readonly [string, string][] = [
-  ['dataset', 'Dataset'],
-  ['feature', 'Feature'],
-  ['label', 'Label'],
-  ['loss', 'Loss'],
-  ['epoca', 'Época'],
-  ['batch', 'Batch'],
-  ['learning-rate', 'Learning rate'],
-  ['regressao-linear', 'Regressão linear'],
-  ['mse', 'MSE'],
-  ['predicao', 'Predição'],
-  ['gradiente', 'Gradiente'],
-  ['convergencia', 'Convergência'],
-  ['minimo-local', 'Mínimo local'],
-  ['imagem', 'Imagem'],
-  ['rgb', 'RGB'],
-  ['grayscale', 'Grayscale'],
-  ['normalizacao', 'Normalização'],
-  ['memoria', 'Memória'],
-  ['dispose', 'dispose'],
-  ['tidy', 'tidy'],
-  ['vazamento', 'Vazamento de memória'],
+/** Concepts introduced by the Phase 5 laboratories (Labs 15-16). */
+const IMAGE_CONCEPTS: readonly ConceptSeed[] = [
+  {
+    id: 'imagem',
+    title: 'Imagem',
+    shortDefinition: 'Grade de pixels que vira um tensor [altura, largura, canais].',
+    fullDefinition:
+      'Uma imagem digital é uma grade de pixels. Cada pixel guarda a intensidade de um ou mais canais (vermelho, verde e azul em uma foto colorida), então a imagem inteira é representada como um tensor de rank 3: [altura, largura, canais]. É essa a forma que uma rede convolucional recebe como entrada.',
+    mathematicalNotation: 'I \\in \\mathbb{R}^{H \\times W \\times C}',
+    visualAnalogy: 'Um mosaico de azulejos em que cada azulejo guarda três números: quanto de vermelho, verde e azul.',
+    tfjsApi: ['tf.browser.fromPixels', 'tf.image.resizeBilinear'],
+    relatedConcepts: ['tensor', 'rgb', 'grayscale', 'normalizacao'],
+    introducedInLab: 'lab-15-images',
+  },
+  {
+    id: 'rgb',
+    title: 'RGB',
+    shortDefinition: 'Três canais (vermelho, verde, azul) que descrevem a cor de cada pixel.',
+    fullDefinition:
+      'O modelo RGB descreve uma cor por três intensidades, normalmente de 0 a 255. Em uma imagem colorida o tensor tem shape [altura, largura, 3], com as três intensidades intercaladas por pixel. Praticamente todo modelo pré-treinado de visão espera a entrada nesse formato de canais por último (channels-last).',
+    mathematicalNotation: '(R, G, B) \\in [0, 255]^3',
+    visualAnalogy: 'Misturar três tintas — vermelha, verde e azul — para produzir qualquer cor.',
+    tfjsApi: ['tf.browser.fromPixels', 'tf.split'],
+    relatedConcepts: ['imagem', 'grayscale', 'tensor'],
+    introducedInLab: 'lab-15-images',
+  },
+  {
+    id: 'grayscale',
+    title: 'Grayscale',
+    shortDefinition: 'Imagem de um único canal obtida pela luminância dos canais RGB.',
+    fullDefinition:
+      'Converter uma imagem para escala de cinza substitui as três intensidades por um único valor de brilho. Usamos a luminância 0,299·R + 0,587·G + 0,114·B, que pondera os canais conforme a sensibilidade do olho humano (os coeficientes do padrão BT.601). O tensor passa a ter shape [altura, largura, 1], reduzindo o custo de cálculo.',
+    mathematicalNotation: 'Y = 0{,}299R + 0{,}587G + 0{,}114B',
+    visualAnalogy: 'Tirar uma foto em preto e branco: as cores viram tons de cinza.',
+    tfjsApi: ['tf.sum', 'tf.mul'],
+    relatedConcepts: ['imagem', 'rgb', 'normalizacao'],
+    introducedInLab: 'lab-15-images',
+  },
+  {
+    id: 'normalizacao',
+    title: 'Normalização',
+    shortDefinition: 'Reescala os valores dos pixels para uma faixa pequena e centrada.',
+    fullDefinition:
+      'Redes treinam melhor quando as entradas têm escala controlada. A normalização unitária divide os pixels por 255 e produz o intervalo [0, 1]; a normalização com sinal aplica (x / 255 − 0,5)·2 e produz [−1, 1], que é a entrada esperada pela MobileNet. Sem normalizar, gradientes ficam instáveis e o treino converge devagar.',
+    mathematicalNotation: 'x_{unit} = x / 255, \\quad x_{signed} = (x / 255 - 0{,}5) \\cdot 2',
+    visualAnalogy: 'Converter uma medida em metros para centímetros: mesma informação, escala adequada.',
+    tfjsApi: ['tf.div', 'tf.sub', 'tf.mul'],
+    relatedConcepts: ['imagem', 'rgb', 'grayscale', 'learning-rate'],
+    introducedInLab: 'lab-15-images',
+  },
+];
+
+/** Concepts introduced by the Phase 5 memory laboratory (Lab 16). */
+const MEMORY_CONCEPTS: readonly ConceptSeed[] = [
+  {
+    id: 'memoria',
+    title: 'Memória (TF.js)',
+    shortDefinition: 'Recurso ocupado pelos tensores vivos, medido por tf.memory().',
+    fullDefinition:
+      'Cada tensor criado reserva memória na GPU (WebGL/WebGPU) ou na CPU. tf.memory() informa quantos tensores estão vivos (numTensors), quantos bytes estão reservados (numBytes) e se a contagem é confiável (unreliable). Monitorar essa API é a forma prática de detectar vazamentos durante uma sessão.',
+    visualAnalogy: 'O medidor de uma pia: quantos pratos ainda estão sujos.',
+    tfjsApi: ['tf.memory', 'tf.disposeVariables'],
+    relatedConcepts: ['tensor', 'dispose', 'tidy', 'vazamento'],
+    introducedInLab: 'lab-16-memory',
+  },
+  {
+    id: 'dispose',
+    title: 'dispose',
+    shortDefinition: 'Libera manualmente a memória ocupada por um tensor.',
+    fullDefinition:
+      'tensor.dispose() devolve imediatamente a memória daquele tensor. Também há tf.dispose(container) para arrays/objetos de tensores e tf.disposeVariables() para variáveis. O descarte explícito é necessário para tensores de vida longa que ficam fora de um tf.tidy.',
+    visualAnalogy: 'Lavar um prato específico assim que termina de usá-lo.',
+    tfjsApi: ['tensor.dispose', 'tf.dispose', 'tf.disposeVariables'],
+    relatedConcepts: ['memoria', 'tidy', 'vazamento'],
+    introducedInLab: 'lab-16-memory',
+  },
+  {
+    id: 'tidy',
+    title: 'tidy',
+    shortDefinition: 'Executa um bloco e libera automaticamente todos os tensores não retornados.',
+    fullDefinition:
+      'tf.tidy(fn) executa fn e, ao final, descarta todos os tensores criados dentro do bloco, exceto o valor retornado (que pode ser um tensor, um array ou um objeto de tensores). É a forma mais segura de evitar vazamentos em cálculos intermediários, pois o descarte deixa de depender de disciplina manual.',
+    visualAnalogy: 'Lavar toda a louça usada no preparo, deixando de fora só o prato que vai à mesa.',
+    tfjsApi: ['tf.tidy'],
+    relatedConcepts: ['memoria', 'dispose', 'vazamento'],
+    introducedInLab: 'lab-16-memory',
+  },
+  {
+    id: 'vazamento',
+    title: 'Vazamento de memória',
+    shortDefinition: 'Tensores criados e nunca descartados, acumulando memória.',
+    fullDefinition:
+      'Um vazamento acontece quando tensores deixam de ser usados mas continuam vivos — por exemplo, criados em um loop sem dispose nem tidy. A memória cresce a cada iteração até degradar o desempenho ou esgotar o backend. Não é um erro lançado pelo JavaScript: só o monitoramento de tf.memory() revela o problema.',
+    visualAnalogy: 'Empilhar pratos na pia sem lavar nenhum até ela transbordar.',
+    tfjsApi: ['tf.memory', 'tf.tidy', 'tensor.dispose'],
+    relatedConcepts: ['memoria', 'dispose', 'tidy'],
+    introducedInLab: 'lab-16-memory',
+  },
+];
+
+/** Concepts introduced by the Phase 3 ML & regression laboratories (Labs 8-10). */
+const ML_CONCEPTS: readonly ConceptSeed[] = [
+  {
+    id: 'dataset',
+    title: 'Dataset',
+    shortDefinition: 'Conjunto de exemplos usados para treinar e avaliar um modelo.',
+    fullDefinition:
+      'Um dataset (conjunto de dados) reúne os exemplos que alimentam o aprendizado. Cada exemplo traz as características (features) e, no aprendizado supervisionado, o rótulo (label) a prever. O dataset costuma ser dividido em treino, validação e teste para medir a capacidade de generalização.',
+    mathematicalNotation: '\\mathcal{D} = \\{(\\mathbf{x}_i, y_i)\\}_{i=1}^{n}',
+    visualAnalogy: 'Uma pilha de fichas de imóveis, cada ficha com os dados da casa e seu preço.',
+    tfjsApi: ['tf.data.csv', 'tf.tensor2d', 'tf.tensor1d'],
+    relatedConcepts: ['feature', 'label', 'treino', 'epoca', 'batch', 'loss'],
+    introducedInLab: 'lab-08-ml-fundamentals',
+  },
+  {
+    id: 'feature',
+    title: 'Feature',
+    shortDefinition: 'Característica de entrada que descreve um exemplo.',
+    fullDefinition:
+      'Uma feature (característica) é uma informação de entrada observada, como a área, o número de quartos ou a idade de uma casa. Em TF.js elas ficam em uma matriz [amostras, features]. Escolher features informativas — normalmente as mais correlacionadas com o alvo — melhora o aprendizado.',
+    mathematicalNotation: '\\mathbf{x} \\in \\mathbb{R}^{d}',
+    visualAnalogy: 'Os campos de um formulário preenchidos para descrever cada objeto.',
+    tfjsApi: ['tf.tensor2d', 'tf.mean', 'tf.max'],
+    relatedConcepts: ['dataset', 'label', 'predicao'],
+    introducedInLab: 'lab-08-ml-fundamentals',
+  },
+  {
+    id: 'label',
+    title: 'Label',
+    shortDefinition: 'Resposta esperada (alvo) para cada exemplo do dataset.',
+    fullDefinition:
+      'O label (rótulo) é o valor que queremos prever: um preço na regressão, uma categoria na classificação. No treino supervisionado, o modelo compara sua predição com o label por meio da função de custo e ajusta os parâmetros para reduzir a diferença.',
+    mathematicalNotation: 'y \\in \\mathbb{R} \\;\\text{ou}\\; y \\in \\{1, \\ldots, K\\}',
+    visualAnalogy: 'A resposta anotada no verso da ficha, usada para corrigir o palpite.',
+    tfjsApi: ['tf.tensor1d', 'tf.oneHot'],
+    relatedConcepts: ['dataset', 'feature', 'classificacao', 'loss'],
+    introducedInLab: 'lab-08-ml-fundamentals',
+  },
+  {
+    id: 'loss',
+    title: 'Loss',
+    shortDefinition: 'Função que mede o erro entre predição e valor esperado.',
+    fullDefinition:
+      'A função de custo (loss) transforma o erro do modelo em um número que se busca minimizar. No treino, ela é avaliada a cada lote e seu gradiente orienta a atualização dos pesos. Exemplos: MSE para regressão e entropia cruzada para classificação.',
+    mathematicalNotation: 'J(\\theta) = \\frac{1}{n}\\sum_i L(\\hat{y}_i, y_i)',
+    visualAnalogy: 'A nota vermelha de um boletim: quanto menor, melhor o desempenho.',
+    tfjsApi: ['tf.losses.meanSquaredError', 'tf.losses.softmaxCrossEntropy'],
+    relatedConcepts: ['mse', 'treino', 'gradiente', 'epoca'],
+    introducedInLab: 'lab-08-ml-fundamentals',
+  },
+  {
+    id: 'epoca',
+    title: 'Época',
+    shortDefinition: 'Uma passagem completa por todo o conjunto de treino.',
+    fullDefinition:
+      'Uma época (epoch) é uma varredura completa do dataset de treino. Treinar por várias épocas permite que o modelo veja os dados repetidamente e refine os pesos. Poucas épocas deixam o modelo subajustado; muitas podem causar sobreajuste (overfitting) e decorar o treino.',
+    mathematicalNotation: '\\text{1 época} = \\lceil n / B \\rceil \\text{ passos}',
+    visualAnalogy: 'Reler o livro inteiro do começo ao fim antes de começar de novo.',
+    tfjsApi: ['model.fit({ epochs })'],
+    relatedConcepts: ['treino', 'batch', 'loss'],
+    introducedInLab: 'lab-08-ml-fundamentals',
+  },
+  {
+    id: 'batch',
+    title: 'Batch',
+    shortDefinition: 'Subconjunto de exemplos processado em uma única atualização.',
+    fullDefinition:
+      'Um batch (lote) agrupa exemplos para calcular a perda e atualizar os pesos de uma vez. O mini-batch gradient descent equilibra estabilidade e custo: lotes pequenos são ruidosos e rápidos, lotes grandes são estáveis e mais caros. O tamanho do lote influencia quantos passos cabem em uma época.',
+    mathematicalNotation: 'B = \\text{tamanho do lote}, \\quad \\text{passos/época} = n / B',
+    visualAnalogy: 'Corrigir um monte de provas por vez, em vez de uma prova por vez ou todas de uma vez.',
+    tfjsApi: ['model.fit({ batchSize })'],
+    relatedConcepts: ['dataset', 'epoca', 'treino', 'learning-rate'],
+    introducedInLab: 'lab-08-ml-fundamentals',
+  },
+  {
+    id: 'learning-rate',
+    title: 'Learning rate',
+    shortDefinition: 'Tamanho do passo dado na direção do gradiente.',
+    fullDefinition:
+      'A taxa de aprendizado (learning rate, η) controla quanto os pesos mudam a cada atualização. Se for pequena demais, o treino demora a convergir; se for grande demais, o erro oscila e pode divergir. Ajustá-la é uma das decisões mais importantes na descida do gradiente.',
+    mathematicalNotation: '\\theta \\leftarrow \\theta - \\eta \\nabla_\\theta J(\\theta)',
+    visualAnalogy: 'O tamanho dos passos ao descer uma encosta: passos curtos demoram, passos largos podem passar do ponto.',
+    tfjsApi: ['tf.train.sgd', 'tf.train.adam'],
+    relatedConcepts: ['gradiente', 'convergencia', 'minimo-local', 'treino'],
+    introducedInLab: 'lab-08-ml-fundamentals',
+    reinforcedInLabs: ['lab-10-gradient-descent'],
+  },
+  {
+    id: 'regressao-linear',
+    title: 'Regressão linear',
+    shortDefinition: 'Modelo que ajusta uma reta para prever um valor contínuo.',
+    fullDefinition:
+      'A regressão linear modela a relação entre uma ou mais features e um alvo contínuo com uma equação linear y = wx + b. Aprender consiste em encontrar o peso w e o intercepto b que minimizam o erro quadrático sobre os dados. É o ponto de partida para entender modelos mais complexos.',
+    mathematicalNotation: '\\hat{y} = w x + b',
+    visualAnalogy: 'Esticar uma régua entre os pontos e usar a régua para estimar valores novos.',
+    tfjsApi: ['tf.tensor2d', 'tf.matMul', 'tf.losses.meanSquaredError'],
+    relatedConcepts: ['predicao', 'mse', 'dataset', 'feature'],
+    introducedInLab: 'lab-09-linear-regression',
+  },
+  {
+    id: 'mse',
+    title: 'MSE',
+    shortDefinition: 'Erro quadrático médio: média dos erros ao quadrado.',
+    fullDefinition:
+      'O MSE (mean squared error) mede a perda média elevando ao quadrado a diferença entre predição e valor real. Elevar ao quadrado penaliza mais os erros grandes e torna a função suave, facilitando o cálculo do gradiente. É a loss padrão da regressão linear.',
+    mathematicalNotation: '\\text{MSE} = \\frac{1}{n}\\sum_i (\\hat{y}_i - y_i)^2',
+    visualAnalogy: 'Medir o quanto a régua passa longe de cada ponto, preferindo penalizar mais os furos maiores.',
+    tfjsApi: ['tf.losses.meanSquaredError'],
+    relatedConcepts: ['loss', 'regressao-linear', 'predicao', 'gradiente'],
+    introducedInLab: 'lab-09-linear-regression',
+  },
+  {
+    id: 'predicao',
+    title: 'Predição',
+    shortDefinition: 'Saída produzida pelo modelo para uma entrada.',
+    fullDefinition:
+      'A predição (prediction) é o valor estimado pelo modelo: ŷ para uma entrada x. Na regressão é um número; na classificação é uma classe ou uma probabilidade. Comparar a predição com o label durante o treino fornece o erro que orienta o aprendizado.',
+    mathematicalNotation: '\\hat{y} = f(\\mathbf{x})',
+    visualAnalogy: 'O palpite do modelo antes de conferir a resposta certa.',
+    tfjsApi: ['model.predict', 'tf.matMul'],
+    relatedConcepts: ['regressao-linear', 'label', 'loss'],
+    introducedInLab: 'lab-09-linear-regression',
+  },
+  {
+    id: 'gradiente',
+    title: 'Gradiente',
+    shortDefinition: 'Direção de maior crescimento da perda em relação aos parâmetros.',
+    fullDefinition:
+      'O gradiente reúne as derivadas parciais da perda em relação a cada parâmetro e aponta para a direção em que o erro cresce mais rápido. A descida do gradiente caminha no sentido oposto, reduzindo a perda passo a passo. Em TF.js ele é obtido automaticamente por autodiferenciação.',
+    mathematicalNotation: '\\nabla_\\theta J = \\left[\\frac{\\partial J}{\\partial \\theta_1}, \\ldots, \\frac{\\partial J}{\\partial \\theta_k}\\right]',
+    visualAnalogy: 'A bússola de inclinação: ela indica onde o terreno sobe mais, então você desce na direção contrária.',
+    tfjsApi: ['tf.grad', 'tf.variableGrads', 'optimizer.minimize'],
+    relatedConcepts: ['derivada', 'learning-rate', 'convergencia', 'minimo-local', 'treino'],
+    introducedInLab: 'lab-10-gradient-descent',
+  },
+  {
+    id: 'convergencia',
+    title: 'Convergência',
+    shortDefinition: 'Estabilização da perda quando o treino encontra um bom ajuste.',
+    fullDefinition:
+      'Dizemos que o treino convergiu quando a perda para de cair de forma relevante e os parâmetros se estabilizam. O learning rate e o formato da superfície de custo determinam a velocidade e a qualidade da convergência; passos grandes podem impedir que ela aconteça.',
+    mathematicalNotation: '\\|\\nabla_\\theta J\\| \\to 0',
+    visualAnalogy: 'A bola parando no fundo da tigela, sem subir mais pelas paredes.',
+    tfjsApi: ['model.fit({ epochs, callbacks })'],
+    relatedConcepts: ['gradiente', 'learning-rate', 'minimo-local'],
+    introducedInLab: 'lab-10-gradient-descent',
+  },
+  {
+    id: 'minimo-local',
+    title: 'Mínimo local',
+    shortDefinition: 'Ponto baixo da superfície de custo do qual não se sai com passos simples.',
+    fullDefinition:
+      'Um mínimo local é um vale que não é o menor de todos (o mínimo global). A descida do gradiente pode ficar presa nele se os passos forem pequenos. Learning rates maiores, momentum ou otimizadores adaptativos ajudam a escapar desses vales.',
+    mathematicalNotation: '\\nabla_\\theta J(\\theta^*) = 0 \\;\\text{sem ser mínimo global}',
+    visualAnalogy: 'Uma cratera pequena no meio da descida: parece o fim, mas ainda há um vale mais fundo adiante.',
+    tfjsApi: ['tf.train.adam', 'tf.train.momentum'],
+    relatedConcepts: ['gradiente', 'convergencia', 'learning-rate'],
+    introducedInLab: 'lab-10-gradient-descent',
+  },
 ];
 
 function toConcept(seed: ConceptSeed): ConceptSchema {
@@ -552,9 +787,9 @@ function toConcept(seed: ConceptSeed): ConceptSchema {
 export const CONCEPTS: readonly ConceptSchema[] = [
   ...TENSOR_CONCEPTS.map(toConcept),
   ...NEURAL_CONCEPTS.map(toConcept),
-  ...CONCEPT_SEEDS.map(([id, title]) =>
-    toConcept({ id, title, shortDefinition: title, fullDefinition: title }),
-  ),
+  ...IMAGE_CONCEPTS.map(toConcept),
+  ...MEMORY_CONCEPTS.map(toConcept),
+  ...ML_CONCEPTS.map(toConcept),
 ];
 
 /** Set of every known concept id, for O(1) reference validation. */

@@ -2,10 +2,14 @@ import { computed, inject, Injectable, signal } from '@angular/core';
 import { LocalStorageService } from '@core/data';
 import { ProgressMigrator } from './progress-migrator';
 import {
+  ANALYTICS_EVENT_LIMIT,
   createDefaultProgress,
   createLabProgress,
+  type AnalyticsEvent,
+  type AnalyticsEventType,
   type LabProgress,
   type ProgressState,
+  type UserSettings,
 } from './progress.types';
 
 /** localStorage key required by the technical architecture spec. */
@@ -25,6 +29,9 @@ export class ProgressService {
   private readonly state = signal<ProgressState>(this.load());
 
   readonly progress = this.state.asReadonly();
+
+  /** Read-only view of the local analytics events (oldest first). */
+  readonly analytics = computed(() => this.state().analytics);
 
   readonly completedLabIds = computed(
     () => new Set(this.state().labs.filter((lab) => lab.status === 'completed').map((lab) => lab.labId)),
@@ -58,18 +65,70 @@ export class ProgressService {
     });
   }
 
-  /** Records that a glossary concept was viewed. */
-  recordGlossaryView(conceptId: string): void {
-    this.update((state) =>
-      state.glossaryViews.includes(conceptId)
-        ? state
-        : { ...state, glossaryViews: [...state.glossaryViews, conceptId] },
-    );
+  /**
+   * Appends an analytics event, dropping the oldest entries beyond
+   * `ANALYTICS_EVENT_LIMIT` so the localStorage quota is respected.
+   */
+  recordAnalytics(eventType: AnalyticsEventType, payload?: Record<string, unknown>): void {
+    const event: AnalyticsEvent = {
+      eventType,
+      timestamp: new Date().toISOString(),
+      payload,
+    };
+    this.update((state) => ({
+      ...state,
+      analytics: [...state.analytics, event].slice(-ANALYTICS_EVENT_LIMIT),
+    }));
   }
 
-  /** Serializes the current progress as a pretty-printed JSON document. */
+  /** Records that a glossary concept was viewed (list + analytics event). */
+  recordGlossaryView(conceptId: string): void {
+    if (!this.state().glossaryViews.includes(conceptId)) {
+      this.update((state) => ({ ...state, glossaryViews: [...state.glossaryViews, conceptId] }));
+    }
+    this.recordAnalytics('glossary-viewed', { conceptId });
+  }
+
+  /** Marks a lab as started/visited and records the matching analytics event. */
+  markLabStarted(labId: string): void {
+    const now = new Date().toISOString();
+    this.updateLab(labId, (lab) => ({
+      ...lab,
+      status: lab.status === 'not-started' ? 'in-progress' : lab.status,
+      lastVisitedAt: now,
+    }));
+    this.recordAnalytics('lab-started', { labId });
+  }
+
+  /** Accumulates elapsed time for a lab (no-op for non-positive deltas). */
+  addLabTime(labId: string, elapsedMs: number): void {
+    if (elapsedMs <= 0) {
+      return;
+    }
+    const now = new Date().toISOString();
+    this.updateLab(labId, (lab) => ({
+      ...lab,
+      timeSpentMs: lab.timeSpentMs + elapsedMs,
+      lastVisitedAt: now,
+    }));
+  }
+
+  /** Immutably updates the user settings (preferences). */
+  updateSettings(mutator: (settings: UserSettings) => UserSettings): void {
+    this.update((state) => ({ ...state, settings: mutator(state.settings) }));
+  }
+
+  /**
+   * Serializes the current progress as a pretty-printed JSON document.
+   * Analytics are only included when the user opted in (`includeAnalyticsInExport`).
+   */
   exportToJson(): string {
-    return JSON.stringify(this.state(), null, 2);
+    const state = this.state();
+    if (state.settings.includeAnalyticsInExport) {
+      return JSON.stringify(state, null, 2);
+    }
+    const { version, lastUpdated, labs, glossaryViews, settings } = state;
+    return JSON.stringify({ version, lastUpdated, labs, glossaryViews, settings }, null, 2);
   }
 
   /**

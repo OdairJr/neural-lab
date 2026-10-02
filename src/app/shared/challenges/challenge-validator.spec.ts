@@ -35,6 +35,54 @@ describe('validateChallenge', () => {
       expect(result.valid).toBe(false);
       expect(result.message).toContain('w');
     });
+
+    it('ignores surrounding whitespace when matching string targets', () => {
+      const stringValidation: ChallengeValidation = {
+        type: 'parameter-match',
+        criteria: { target: { channels: 'rgb', normalization: 'signed' } },
+      };
+
+      const result = validateChallenge(stringValidation, {
+        kind: 'parameter-match',
+        params: { channels: ' rgb ', normalization: ' signed ' },
+      });
+
+      expect(result.valid).toBe(true);
+    });
+  });
+
+  describe('code-output', () => {
+    const validation: ChallengeValidation = {
+      type: 'code-output',
+      criteria: { expectedOutput: 'tensores restantes: 0' },
+    };
+
+    it('passes when the printed output matches exactly', () => {
+      const result = validateChallenge(validation, {
+        kind: 'code-output',
+        output: 'tensores restantes: 0',
+      });
+
+      expect(result.valid).toBe(true);
+    });
+
+    it('ignores surrounding whitespace', () => {
+      const result = validateChallenge(validation, {
+        kind: 'code-output',
+        output: '  tensores restantes: 0  ',
+      });
+
+      expect(result.valid).toBe(true);
+    });
+
+    it('fails when the leak count is wrong', () => {
+      const result = validateChallenge(validation, {
+        kind: 'code-output',
+        output: 'tensores restantes: 100',
+      });
+
+      expect(result.valid).toBe(false);
+    });
   });
 
   describe('tensor-value', () => {

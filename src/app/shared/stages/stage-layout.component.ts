@@ -27,7 +27,7 @@ import { STAGE_TYPE_LABELS } from './stage-contract';
         <footer class="border-t border-border pt-4">
           <button
             type="button"
-            class="inline-flex h-10 items-center rounded-nl bg-primary px-4 text-sm font-medium text-white hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+            class="inline-flex h-10 items-center rounded-nl bg-primary px-4 text-sm font-medium text-on-primary hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
             (click)="complete.emit()"
           >
             {{ completionLabel() }}

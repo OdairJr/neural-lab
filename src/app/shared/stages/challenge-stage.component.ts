@@ -1,5 +1,7 @@
-import { ChangeDetectionStrategy, Component, computed, input, output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, output, signal } from '@angular/core';
 import type { StageConfig } from '@domain/content';
+import { ProgressService } from '@domain/progress';
+import { CodeBlockComponent } from '@core/ui';
 import type { LabRuntimeService } from '../runtime/lab-runtime.service';
 import { StageLayoutComponent } from './stage-layout.component';
 import { StageCompletionEvent } from './stage-contract';
@@ -13,7 +15,7 @@ import { validateChallenge, type ChallengeInput, type ChallengeResult } from '..
 @Component({
   selector: 'app-challenge-stage',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [StageLayoutComponent],
+  imports: [CodeBlockComponent, StageLayoutComponent],
   template: `
     <app-stage-layout
       [title]="config().title"
@@ -26,6 +28,10 @@ import { validateChallenge, type ChallengeInput, type ChallengeResult } from '..
 
           @if (current.prompt) {
             <p class="whitespace-pre-line text-sm text-text/90">{{ current.prompt }}</p>
+          }
+
+          @if (config().codeTemplate; as codeTemplate) {
+            <app-code-block [code]="codeTemplate" />
           }
 
           @switch (current.type) {
@@ -53,7 +59,7 @@ import { validateChallenge, type ChallengeInput, type ChallengeResult } from '..
                   <label class="flex flex-col gap-1 text-sm">
                     <span class="text-xs font-medium text-text/70">{{ entry[0] }}</span>
                     <input
-                      type="number"
+                      [type]="isNumberTarget(entry[1]) ? 'number' : 'text'"
                       [value]="parameterValues()[entry[0]] ?? ''"
                       (input)="onParameterInput(entry[0], $event)"
                       class="h-10 rounded-nl border border-border bg-surface px-3 text-sm focus-visible:outline-2 focus-visible:outline-primary"
@@ -113,12 +119,12 @@ import { validateChallenge, type ChallengeInput, type ChallengeResult } from '..
           <div class="flex flex-wrap items-center gap-3">
             <button
               type="button"
-              class="inline-flex h-10 items-center rounded-nl bg-primary px-4 text-sm font-medium text-white hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+              class="inline-flex h-10 items-center rounded-nl bg-primary px-4 text-sm font-medium text-on-primary hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
               (click)="submit()"
             >
               Verificar resposta
             </button>
-            <span class="text-xs text-text/60">Tentativas: {{ attempts() }}</span>
+            <span class="text-xs text-text/70">Tentativas: {{ attempts() }}</span>
           </div>
 
           @if (result(); as outcome) {
@@ -147,6 +153,8 @@ export class ChallengeStageComponent {
   readonly stageIndex = input(0);
   readonly runtime = input.required<LabRuntimeService>();
   readonly stageComplete = output<StageCompletionEvent>();
+
+  private readonly progress = inject(ProgressService);
 
   protected readonly attempts = signal(0);
   protected readonly result = signal<ChallengeResult | null>(null);
@@ -182,6 +190,11 @@ export class ChallengeStageComponent {
 
   protected isSelected(optionId: string): boolean {
     return this.selectedOptionIds().includes(optionId);
+  }
+
+  /** Numeric targets get a numeric input; string enum targets get a text input. */
+  protected isNumberTarget(expected: unknown): boolean {
+    return typeof expected === 'number';
   }
 
   protected onOptionChange(optionId: string, event: Event): void {
@@ -228,12 +241,34 @@ export class ChallengeStageComponent {
     this.attempts.update((count) => count + 1);
     this.result.set(outcome);
 
+    const labId = this.runtime().labId;
+    const stageIndex = this.stageIndex();
+    const hintUsed = this.hint() !== null;
+
+    if (labId) {
+      this.progress.updateLab(labId, (lab) => ({
+        ...lab,
+        challengeAttempts: [
+          ...lab.challengeAttempts,
+          {
+            stageIndex,
+            timestamp: new Date().toISOString(),
+            success: outcome.valid,
+            hintUsed,
+          },
+        ],
+      }));
+    }
+
     if (outcome.valid) {
+      this.progress.recordAnalytics('challenge-passed', { labId, stageIndex });
       this.stageComplete.emit({
         type: this.config().type,
-        index: this.stageIndex(),
+        index: stageIndex,
         success: true,
       });
+    } else {
+      this.progress.recordAnalytics('challenge-failed', { labId, stageIndex });
     }
   }
 

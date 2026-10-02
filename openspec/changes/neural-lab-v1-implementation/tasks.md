@@ -10,7 +10,7 @@
 - [x] 1.1.5 Configure path aliases in `tsconfig.json`: `@core/*`, `@domain/*`, `@shared/*`, `@features/*`, `@content/*` — verify imports work in a test file
 - [x] 1.1.6 Configure GitHub Actions CI workflow: OpenSpec validate, lint, unit tests, build, E2E (extend `.github/workflows/ci-cd.yml`) — verify workflow runs on PR
 - [x] 1.1.7 Initialize OpenSpec in repo: `openspec init --tools opencode` — verify `openspec/` and `.opencode/` exist
-- [ ] 1.1.8 Configure Playwright (`playwright.config.ts`): video on, screenshot on failure + key validation points, trace on retry — verify `npx playwright --version`
+- [x] 1.1.8 Configure Playwright (`playwright.config.ts`): video on, screenshot on failure + key validation points, trace on retry — verify `npx playwright --version`
 
 ### 1.2 TF.js Integration & Memory Layer
 - [x] 1.2.1 Install `@tensorflow/tfjs`, `@tensorflow/tfjs-vis` — verify `npm ls @tensorflow/tfjs`
@@ -26,7 +26,7 @@
 - [x] 1.3.3 Implement `core/ui` primitives: Button, Card, Panel, Badge, Tooltip, Modal, Tabs, ProgressRing, CodeBlock, CopyButton — verify Storybook/visual regression for each
 - [x] 1.3.4 Create `ThemeService`: persists preference, toggles `data-theme` on `<html>` — verify theme persists across refresh
 - [x] 1.3.5 Create `FocusTrapDirective`, `LiveRegionService`, `ReducedMotionMixin` — verify axe-core passes on modal, live region announces
-- [ ] 1.3.6 Run accessibility audit baseline: `npm run test:a11y` — verify 0 violations AA
+- [x] 1.3.6 Run accessibility audit baseline: `npm run test:a11y` — verify 0 violations AA
 
 ### 1.4 Routing, Layout, Progress Persistence
 - [x] 1.4.1 Create `app.routes.ts` with lazy routes for all sections (hash location preserved) — verify `npm run start` loads routes
@@ -185,54 +185,54 @@
 ## 6. Phase 5 — Images & Memory (Weeks 19-22)
 
 ### 6.1 Lab 15: Images as Tensors
-- [ ] 6.1.1 Create `lab-15-images` lazy feature — verify route works
-- [ ] 6.1.2 Implement image → pixels → tensor, shape, RGB, grayscale, resize, normalize — verify tensor shapes correct
-- [ ] 6.1.3 Experiment: upload image → see tensor (3×H×W), grayscale (1×H×W), resize (224×224), normalize [0,1] — verify upload works
-- [ ] 6.1.4 Visualization: image-tensor (original + tensor slices side-by-side), channel toggle — verify visualization renders
-- [ ] 6.1.5 "Under the hood": shows `tf.browser.fromPixels`, `tf.image.resizeBilinear`, div/255 — verify panel shows ops
-- [ ] 6.1.6 Challenge: preprocess image for MobileNet input (224×224×3, [-1,1]) — verify challenge validates
+- [x] 6.1.1 Create `lab-15-images` lazy feature — verify route works
+- [x] 6.1.2 Implement image → pixels → tensor, shape, RGB, grayscale, resize, normalize — verify tensor shapes correct
+- [x] 6.1.3 Experiment: upload image → see tensor (3×H×W), grayscale (1×H×W), resize (224×224), normalize [0,1] — verify upload works
+- [x] 6.1.4 Visualization: image-tensor (original + tensor slices side-by-side), channel toggle — verify visualization renders
+- [x] 6.1.5 "Under the hood": shows `tf.browser.fromPixels`, `tf.image.resizeBilinear`, div/255 — verify panel shows ops
+- [x] 6.1.6 Challenge: preprocess image for MobileNet input (224×224×3, [-1,1]) — verify challenge validates
 
 ### 6.2 Lab 16: Memory Management
-- [ ] 6.2.1 Create `lab-16-memory` lazy feature — verify route works
-- [ ] 6.2.2 Implement tf.memory(), tf.dispose(), tf.tidy(), leaks, best practices — verify concepts registered
-- [ ] 6.2.3 Experiment: leak demo (create tensors in loop without dispose) → memory rises → fix with tidy — verify leak detected, fix works
-- [ ] 6.2.4 Visualization: memory-timeline (live), leak vs fixed comparison — verify timeline shows leak
-- [ ] 6.2.5 "Under the hood": shows memory before/after each operation — verify panel shows memory
-- [ ] 6.2.6 Challenge: refactor leaky code to use tidy (code-output validation) — verify challenge validates
+- [x] 6.2.1 Create `lab-16-memory` lazy feature — verify route works
+- [x] 6.2.2 Implement tf.memory(), tf.dispose(), tf.tidy(), leaks, best practices — verify concepts registered
+- [x] 6.2.3 Experiment: leak demo (create tensors in loop without dispose) → memory rises → fix with tidy — verify leak detected, fix works
+- [x] 6.2.4 Visualization: memory-timeline (live), leak vs fixed comparison — verify timeline shows leak
+- [x] 6.2.5 "Under the hood": shows memory before/after each operation — verify panel shows memory
+- [x] 6.2.6 Challenge: refactor leaky code to use tidy (code-output validation) — verify challenge validates
 
 ## 7. Phase 6 — Polish & Integration (Weeks 23-26)
 
 ### 7.1 Glossary & Concept Integration
-- [ ] 7.1.1 Create `features/glossary`: page, search, detail view, inline modal — verify glossary page works
-- [ ] 7.1.2 Populate concept registry from all labs (40+ concepts) — verify all concepts linked
-- [ ] 7.1.3 Implement inline glossary links in lab content (markdown → linkify) — verify links work in labs
-- [ ] 7.1.4 Add cross-references: "Ver também", "Pré-requisito", "Reforçado em" — verify cross-refs appear
+- [x] 7.1.1 Create `features/glossary`: page, search, detail view, inline modal — verify glossary page works
+- [x] 7.1.2 Populate concept registry from all labs (40+ concepts) — verify all concepts linked
+- [x] 7.1.3 Implement inline glossary links in lab content (markdown → linkify) — verify links work in labs
+- [x] 7.1.4 Add cross-references: "Ver também", "Pré-requisito", "Reforçado em" — verify cross-refs appear
 
 ### 7.2 Progress Dashboard & Analytics
-- [ ] 7.2.1 Create `ProgressComponent`: overall %, radar chart (12 concepts), per-lab detail — verify dashboard renders
-- [ ] 7.2.2 Implement analytics events: lab-started, stage-completed, challenge-passed, etc. — verify events recorded
-- [ ] 7.2.3 Local analytics view: "Seu aprendizado" (time, streak, struggle points) — verify view shows data
-- [ ] 7.2.4 Export includes analytics (opt-in) — verify export JSON contains analytics
+- [x] 7.2.1 Create `ProgressComponent`: overall %, radar chart (12 concepts), per-lab detail — verify dashboard renders
+- [x] 7.2.2 Implement analytics events: lab-started, stage-completed, challenge-passed, etc. — verify events recorded
+- [x] 7.2.3 Local analytics view: "Seu aprendizado" (time, streak, struggle points) — verify view shows data
+- [x] 7.2.4 Export includes analytics (opt-in) — verify export JSON contains analytics
 
 ### 7.3 Accessibility & Performance Audit
-- [ ] 7.3.1 Run full axe-core audit — verify 0 violations AA
-- [ ] 7.3.2 Keyboard testing all flows — verify tab order, focus management
+- [x] 7.3.1 Run full axe-core audit — verify 0 violations AA
+- [x] 7.3.2 Keyboard testing all flows — verify tab order, focus management
 - [ ] 7.3.3 Screen reader testing (NVDA/VoiceOver) — verify announcements work
 - [ ] 7.3.4 Lighthouse audit: Performance > 90, Accessibility > 95, Best Practices > 90 — verify scores
-- [ ] 7.3.5 Bundle analysis: budgets met (initial < 500KB, lab chunks < 100KB) - verify `npm run build` enforces Angular budgets
+- [x] 7.3.5 Bundle analysis: budgets met (initial < 500KB, lab chunks < 100KB) - verify `npm run build` enforces Angular budgets
 - [ ] 7.3.6 Memory stress test: 30 min session, no leaks — verify `tf.memory()` stable
-- [ ] 7.3.7 Document results in `AUDIT_RESULTS.md` — verify file exists
+- [x] 7.3.7 Document results in `AUDIT_RESULTS.md` — verify file exists
 
 ### 7.4 Documentation & Release Prep
-- [ ] 7.4.1 Write `README.md`: project overview, quick start, architecture summary — verify renders on GitHub
-- [ ] 7.4.2 Write `docs/architecture.md` from technical-architecture spec — verify complete
-- [ ] 7.4.3 Write `docs/learning-path.md` from learning-journey spec — verify complete
-- [ ] 7.4.4 Write `docs/labs/` one page per lab (concepts, stages, experiment guide) — verify 16 pages exist
-- [ ] 7.4.5 Write `docs/tensorflow-concepts.md` — verify TF.js API reference complete
-- [ ] 7.4.6 Write `docs/mathematical-concepts.md` — verify math background complete
-- [ ] 7.4.7 Write `docs/development-guide.md` — verify adding labs documented
-- [ ] 7.4.8 Write `docs/testing-guide.md` — verify test strategies documented
-- [ ] 7.4.9 Write `docs/contribution-guide.md` — verify contribution process documented
+- [x] 7.4.1 Write `README.md`: project overview, quick start, architecture summary — verify renders on GitHub
+- [x] 7.4.2 Write `docs/architecture.md` from technical-architecture spec — verify complete
+- [x] 7.4.3 Write `docs/learning-path.md` from learning-journey spec — verify complete
+- [x] 7.4.4 Write `docs/labs/` one page per lab (concepts, stages, experiment guide) — verify 16 pages exist
+- [x] 7.4.5 Write `docs/tensorflow-concepts.md` — verify TF.js API reference complete
+- [x] 7.4.6 Write `docs/mathematical-concepts.md` — verify math background complete
+- [x] 7.4.7 Write `docs/development-guide.md` — verify adding labs documented
+- [x] 7.4.8 Write `docs/testing-guide.md` — verify test strategies documented
+- [x] 7.4.9 Write `docs/contribution-guide.md` — verify contribution process documented
 - [ ] 7.4.10 Configure GitHub Pages deploy, version tag, changelog — verify deploy works
 
 ## 8. Phase 7 — V2 Preparation (Post-V1 Release)
@@ -250,18 +250,18 @@
 ## 9. Verification & Acceptance
 
 ### 9.1 Playwright E2E Test Suite Setup
-- [ ] 9.1.1 Create Playwright test project structure: `e2e/` folder with page objects for Journey, Lab, Catalog, Glossary, Progress, Settings — verify page objects compile
-- [ ] 9.1.2 Implement core E2E tests: complete Lab 1 (tensors), complete Lab 9 (regression), export/import progress, dark/light theme toggle, reduced motion, keyboard navigation, accessibility audit (axe-playwright) — verify all tests pass
-- [ ] 9.1.3 Implement lab-specific E2E tests for each of 16 labs: stage navigation, experiment interaction, challenge validation, "Under the Hood" panel, progress persistence — verify all 16 lab test suites pass
-- [ ] 9.1.4 Configure Playwright to generate videos for all test runs: `video: 'on'` — verify videos saved to `test-results/videos/`
-- [ ] 9.1.5 Configure Playwright to capture screenshots on failure and at key validation points: `screenshot: 'only-on-failure'` + manual `page.screenshot()` calls — verify screenshots saved to `test-results/screenshots/`
-- [ ] 9.1.6 Configure CI to upload Playwright artifacts (videos, screenshots, traces) — verify GitHub Actions uploads artifacts
-- [ ] 9.1.7 Establish gate: no task considered complete until corresponding Playwright tests pass — verify CI fails on test failure
+- [x] 9.1.1 Create Playwright test project structure: `e2e/` folder with page objects for Journey, Lab, Catalog, Glossary, Progress, Settings — verify page objects compile
+- [x] 9.1.2 Implement core E2E tests: complete Lab 1 (tensors), complete Lab 9 (regression), export/import progress, dark/light theme toggle, reduced motion, keyboard navigation, accessibility audit (axe-playwright) — verify all tests pass
+- [x] 9.1.3 Implement lab-specific E2E tests for each of 16 labs: stage navigation, experiment interaction, challenge validation, "Under the Hood" panel, progress persistence — verify all 16 lab test suites pass
+- [x] 9.1.4 Configure Playwright to generate videos for all test runs: `video: 'on'` — verify videos saved to `test-results/videos/`
+- [x] 9.1.5 Configure Playwright to capture screenshots on failure and at key validation points: `screenshot: 'only-on-failure'` + manual `page.screenshot()` calls — verify screenshots saved to `test-results/screenshots/`
+- [x] 9.1.6 Configure CI to upload Playwright artifacts (videos, screenshots, traces) — verify GitHub Actions uploads artifacts
+- [x] 9.1.7 Establish gate: no task considered complete until corresponding Playwright tests pass — verify CI fails on test failure
 
 ### 9.2 End-to-End Validation
-- [ ] 9.2.1 Complete full journey: Labs 1-16 via Playwright — verify all labs completable, videos generated
-- [ ] 9.2.2 Verify progress export/import roundtrip via Playwright — verify data integrity, screenshots captured
-- [ ] 9.2.3 Verify dark/light theme, reduced motion, keyboard-only navigation via Playwright — verify all work, videos generated
+- [x] 9.2.1 Complete full journey: Labs 1-16 via Playwright — verify all labs completable, videos generated
+- [x] 9.2.2 Verify progress export/import roundtrip via Playwright — verify data integrity, screenshots captured
+- [x] 9.2.3 Verify dark/light theme, reduced motion, keyboard-only navigation via Playwright — verify all work, videos generated
 - [ ] 9.2.4 Verify production build deploys to GitHub Pages via Playwright — verify live site works, screenshots captured
 - [ ] 9.2.5 Product owner acceptance with Playwright artifact review — verify sign-off recorded with video/screenshot evidence
 

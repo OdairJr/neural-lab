@@ -86,7 +86,7 @@ export class StageNavigatorComponent {
     const base =
       'flex w-full items-center gap-2 rounded-nl px-3 py-2 text-sm focus-visible:outline-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-50';
     if (this.isCurrent(index)) {
-      return `${base} bg-primary text-white`;
+      return `${base} bg-primary text-on-primary`;
     }
     if (this.isCompleted(index)) {
       return `${base} bg-green-50 text-green-800`;

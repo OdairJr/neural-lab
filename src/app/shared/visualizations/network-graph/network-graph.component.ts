@@ -75,7 +75,7 @@ const COLORS = ['#6366f1', '#f97316', '#10b981', '#ef4444', '#0ea5e9'];
           }
         </svg>
 
-        <p class="text-xs text-text/60">
+        <p class="text-xs text-text/70">
           {{ current.layers.length }} camada(s) · {{ current.edgeCount }} conexão(ões)
         </p>
 

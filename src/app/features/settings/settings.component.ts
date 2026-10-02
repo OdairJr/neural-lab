@@ -1,5 +1,5 @@
 import { DOCUMENT } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { ProgressService } from '@domain/progress';
 import {
   ButtonComponent,
@@ -55,6 +55,21 @@ interface ThemeOption {
       </app-card>
 
       <app-card>
+        <label class="flex items-center gap-2 text-sm">
+          <input
+            type="checkbox"
+            [checked]="includeAnalytics()"
+            (change)="setIncludeAnalytics($event)"
+          />
+          Incluir análises no arquivo
+        </label>
+        <p class="mt-1 text-xs text-text/70">
+          Quando ativado, o arquivo exportado inclui os eventos de uso locais (tempo, tentativas
+          e navegação).
+        </p>
+      </app-card>
+
+      <app-card>
         <div class="space-y-3">
           <h2 class="text-sm font-semibold">Progresso</h2>
           <div class="flex flex-wrap gap-2">
@@ -95,6 +110,10 @@ export class SettingsComponent {
   protected readonly motion = inject(MotionPreferenceService);
   protected readonly message = signal('');
 
+  protected readonly includeAnalytics = computed(
+    () => this.progressService.progress().settings.includeAnalyticsInExport,
+  );
+
   protected readonly themeOptions: readonly ThemeOption[] = [
     { value: 'light', label: 'Claro' },
     { value: 'dark', label: 'Escuro' },
@@ -103,10 +122,31 @@ export class SettingsComponent {
 
   protected setTheme(preference: ThemePreference): void {
     this.theme.setPreference(preference);
+    this.progressService.recordAnalytics('settings-changed', {
+      setting: 'theme',
+      value: preference,
+    });
   }
 
   protected setReducedMotion(event: Event): void {
-    this.motion.setReducedMotion((event.target as HTMLInputElement).checked);
+    const value = (event.target as HTMLInputElement).checked;
+    this.motion.setReducedMotion(value);
+    this.progressService.recordAnalytics('settings-changed', {
+      setting: 'reducedMotion',
+      value,
+    });
+  }
+
+  protected setIncludeAnalytics(event: Event): void {
+    const value = (event.target as HTMLInputElement).checked;
+    this.progressService.updateSettings((settings) => ({
+      ...settings,
+      includeAnalyticsInExport: value,
+    }));
+    this.progressService.recordAnalytics('settings-changed', {
+      setting: 'includeAnalyticsInExport',
+      value,
+    });
   }
 
   protected exportProgress(): void {

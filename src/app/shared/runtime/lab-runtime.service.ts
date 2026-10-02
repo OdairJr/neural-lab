@@ -44,12 +44,23 @@ export class LabRuntimeService implements OnDestroy {
   private readonly tensors = new Map<string, Tensor>();
   private readonly experimentState = new Map<string, unknown>();
   private readonly computations = new Subject<ComputationEvent>();
+  private labIdValue = '';
 
   readonly latestComputation = signal<ComputationEvent | null>(null);
 
   /** The TF.js module instance for this lab. */
   get tf(): TfjsModule {
     return this.tfModule;
+  }
+
+  /** Stable id of the laboratory this runtime belongs to (set by the shell). */
+  get labId(): string {
+    return this.labIdValue;
+  }
+
+  /** Associates this runtime with a laboratory id so stages can tag events. */
+  setLabId(labId: string): void {
+    this.labIdValue = labId;
   }
 
   /** Read-only stream of computation events for the panel. */

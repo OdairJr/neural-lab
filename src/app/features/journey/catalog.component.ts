@@ -66,7 +66,7 @@ const ALL_CATEGORIES = 'all';
                       <app-badge variant="info">{{ categoryLabel(lab.category) }}</app-badge>
                     </div>
                     <p class="text-sm text-text/80">{{ lab.description }}</p>
-                    <p class="text-xs text-text/60">{{ lab.estimatedMinutes }} min</p>
+                    <p class="text-xs text-text/70">{{ lab.estimatedMinutes }} min</p>
                   </div>
                 </app-card>
               </a>

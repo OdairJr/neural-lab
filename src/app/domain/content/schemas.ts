@@ -1,6 +1,11 @@
 import { z } from 'zod';
 import type { TensorSnapshot } from '@core/tfjs';
+import type { ImageParameterValue } from '@core/images';
 import type { LayersModel } from '@tensorflow/tfjs';
+
+// Re-exported so content and UI code can import the decoded-image value shape
+// from a single domain entry point.
+export type { ImageParameterValue };
 
 /**
  * Runtime Zod schemas for all declarative educational content.
@@ -86,7 +91,7 @@ export type CodeViewMode = (typeof CODE_VIEW_MODES)[number];
 /* Experiment schema                                                          */
 /* -------------------------------------------------------------------------- */
 
-export const PARAMETER_TYPES = ['number', 'string', 'boolean', 'tensor-shape'] as const;
+export const PARAMETER_TYPES = ['number', 'string', 'boolean', 'tensor-shape', 'image'] as const;
 export type ParameterType = (typeof PARAMETER_TYPES)[number];
 
 export const parameterConfigSchema = z.object({

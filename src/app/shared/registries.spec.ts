@@ -42,6 +42,7 @@ describe('VisualizationRegistry', () => {
       'scatter-plot',
       'activation-curve',
       'memory-timeline',
+      'image-tensor',
     ] as const) {
       expect(registry.has(type)).toBe(true);
       expect(registry.resolve(type)).toBeTruthy();
@@ -51,6 +52,6 @@ describe('VisualizationRegistry', () => {
   it('returns undefined for an unregistered visualization type', () => {
     const registry = TestBed.inject(VisualizationRegistry);
 
-    expect(registry.resolve('image-tensor')).toBeUndefined();
+    expect(registry.resolve('tensor-3d')).toBeUndefined();
   });
 });

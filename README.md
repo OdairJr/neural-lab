@@ -18,6 +18,61 @@ static site to GitHub Pages.
 | Hosting | GitHub Pages (static, hash routing) |
 | Spec workflow | OpenSpec + OpenCode V2 agents |
 
+## Architecture
+
+NeuralLab is a static Angular single-page application with a layered `src/app`
+and declarative, build-time-validated educational content. The full design is in
+[`docs/architecture.md`](docs/architecture.md).
+
+### Layers and dependency direction
+
+```text
+core  →  domain  →  shared  →  features
+                 ▲
+        educational-content (pure data; type-only domain imports)
+```
+
+- `core/` — leaf utilities: `tfjs/`, `data/`, `ui/`, `utils/`, `images/`, `training/`.
+- `domain/` — `models/`, `content/` (Zod schemas), `progress/`.
+- `shared/` — reusable building blocks: `stages/`, `visualizations/`, `experiments/`,
+  `challenges/`, `code-view/`, `concepts/`, `runtime/`.
+- `features/` — routed areas: `journey/`, `lab-shell/`, `labs/`, `glossary/`,
+  `settings/`, `tfjs-status/`, `main-layout/`.
+- `educational-content/` — `lab-configs/` and `concepts/` (TypeScript consts).
+
+Dependencies flow `core → domain → shared → features`; `educational-content` is
+pure data. The boundary is enforced by `no-restricted-imports` patterns in
+`eslint.config.js`. Path aliases (`@core/*`, `@domain/*`, `@shared/*`,
+`@features/*`, `@content/*`) are defined in `tsconfig.json`.
+
+### Lab runtime model
+
+- Each of the 16 labs is a lazy-loaded feature under `features/labs/`, registered
+  through `labRoute(...)` with its `LAB_CONFIG`.
+- `LabShellComponent` renders the lab; `StageRendererComponent` resolves the ten
+  pedagogical stage types through `ComponentRegistry`, and visualizations through
+  `VisualizationRegistry`.
+- `LabRuntimeService` is provided per lab route and owns tensor lifecycle
+  (`tidy`/`track`/`dispose`) plus the "Por baixo dos panos" computation stream.
+- TensorFlow.js initializes through `TfjsInitService` (backend priority
+  `webgpu → webgl → cpu`) and is injected via `TFJS_TOKEN`.
+
+### Content as TypeScript configs
+
+Labs are typed `LaboratoryConfig` objects in `educational-content/lab-configs/`.
+`scripts/validate-content.mjs` (`npm run validate:content`) checks every config
+against the Zod schemas in `domain/content/schemas.ts` and against
+`lab-catalog.ts` at build time. The `image` parameter type renders an image file
+picker and receives a decoded image at runtime; it has no serializable default
+and is excluded from persisted progress.
+
+### Persistence
+
+Progress is local-first. `ProgressService` + `LocalStorageService` persist under
+the `neural-lab:v1:progress` key (schema version 2 with a migrator, and a
+1000-event analytics cap). Analytics are included in an export only when the
+user opts in. There is no backend runtime.
+
 ## Development server
 
 To start a local development server, run:
@@ -48,10 +103,25 @@ Build artifacts are written to `dist/neural-lab/browser`.
 | `npm run e2e` | Playwright tests against the production build |
 | `npm run e2e:ui` | Playwright interactive UI |
 | `npm run openspec:validate` | Validate OpenSpec artifacts |
-| `npm run ci` | Full local CI gate (OpenSpec + lint + unit + build + e2e) |
+| `npm run validate:content` | Validate every lab config against the Zod schemas |
+| `npm run ci` | Full local CI gate (OpenSpec + content validation + lint + unit + build + e2e) |
 
 `npm run e2e` serves an existing production build, so run `npm run build`
 first when running E2E locally. `npm run ci` already does this.
+
+## Documentation
+
+| Document | Contents |
+| --- | --- |
+| [`docs/architecture.md`](docs/architecture.md) | Layers, TF.js integration, lab and content architecture, build/deploy |
+| [`docs/learning-path.md`](docs/learning-path.md) | 16-lab sequence, prerequisites, pedagogical stages, glossary |
+| [`docs/development-guide.md`](docs/development-guide.md) | Adding a laboratory end to end |
+| [`docs/testing-guide.md`](docs/testing-guide.md) | Vitest, Playwright, accessibility and the local CI gate |
+| [`docs/contribution-guide.md`](docs/contribution-guide.md) | OpenSpec workflow, PR flow, Git safety |
+| [`docs/labs/`](docs/labs/) | One page per laboratory (concepts, stages, experiment guide) |
+| [`docs/tensorflow-concepts.md`](docs/tensorflow-concepts.md) | TensorFlow.js API reference used by the labs |
+| [`docs/mathematical-concepts.md`](docs/mathematical-concepts.md) | Math background for the labs |
+| [`AUDIT_RESULTS.md`](AUDIT_RESULTS.md) | Accessibility and performance audit results |
 
 ## AI engineering workflow
 
@@ -82,7 +152,7 @@ The site is a GitHub Pages **project site** served from
 The `CI / CD` workflow (`.github/workflows/ci-cd.yml`) runs on pull requests
 and pushes to `main`:
 
-1. **Quality** — OpenSpec validation, lint, unit tests.
+1. **Quality** — OpenSpec validation, content validation, lint, unit tests.
 2. **Build and E2E** — production build, Playwright, then (on `main`) a Pages
    build with the correct base href.
 3. **Deploy** — publishes the Pages artifact via `actions/deploy-pages`.
