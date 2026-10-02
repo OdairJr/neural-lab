@@ -224,15 +224,15 @@
 - [x] 7.3.7 Document results in `AUDIT_RESULTS.md` — verify file exists
 
 ### 7.4 Documentation & Release Prep
-- [ ] 7.4.1 Write `README.md`: project overview, quick start, architecture summary — verify renders on GitHub
-- [ ] 7.4.2 Write `docs/architecture.md` from technical-architecture spec — verify complete
-- [ ] 7.4.3 Write `docs/learning-path.md` from learning-journey spec — verify complete
-- [ ] 7.4.4 Write `docs/labs/` one page per lab (concepts, stages, experiment guide) — verify 16 pages exist
-- [ ] 7.4.5 Write `docs/tensorflow-concepts.md` — verify TF.js API reference complete
-- [ ] 7.4.6 Write `docs/mathematical-concepts.md` — verify math background complete
-- [ ] 7.4.7 Write `docs/development-guide.md` — verify adding labs documented
-- [ ] 7.4.8 Write `docs/testing-guide.md` — verify test strategies documented
-- [ ] 7.4.9 Write `docs/contribution-guide.md` — verify contribution process documented
+- [x] 7.4.1 Write `README.md`: project overview, quick start, architecture summary — verify renders on GitHub
+- [x] 7.4.2 Write `docs/architecture.md` from technical-architecture spec — verify complete
+- [x] 7.4.3 Write `docs/learning-path.md` from learning-journey spec — verify complete
+- [x] 7.4.4 Write `docs/labs/` one page per lab (concepts, stages, experiment guide) — verify 16 pages exist
+- [x] 7.4.5 Write `docs/tensorflow-concepts.md` — verify TF.js API reference complete
+- [x] 7.4.6 Write `docs/mathematical-concepts.md` — verify math background complete
+- [x] 7.4.7 Write `docs/development-guide.md` — verify adding labs documented
+- [x] 7.4.8 Write `docs/testing-guide.md` — verify test strategies documented
+- [x] 7.4.9 Write `docs/contribution-guide.md` — verify contribution process documented
 - [ ] 7.4.10 Configure GitHub Pages deploy, version tag, changelog — verify deploy works
 
 ## 8. Phase 7 — V2 Preparation (Post-V1 Release)
